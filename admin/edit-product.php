@@ -1,14 +1,15 @@
 <?php
 /**
- * Admin: Add New Product
+ * Admin: Edit Product
  *
  * Protected page — redirects to login if no valid admin session.
- * Handles rendering the add-product form and processing its submission.
+ * Loads an existing product by id, renders a pre-filled form, and
+ * updates the record on submission. The image is only replaced if a
+ * new file is uploaded; otherwise the existing image is kept.
  */
 
 session_start();
 
-// Enforce authentication
 if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header('Location: /admin/index.php');
     exit;
@@ -94,17 +95,46 @@ $valid_subcategories = [
     'whiskey', 'rum', 'gin', 'vodka', 'brandy', 'liquor',
 ];
 
+/* ─── Load the product ───────────────────────────────────────────────── */
+
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+if ($id <= 0) {
+    header('Location: /admin/dashboard.php');
+    exit;
+}
+
+try {
+    $pdo  = get_db_connection();
+    $stmt = $pdo->prepare(
+        'SELECT id, name, category, subcategory, country, description, image, visible
+           FROM products
+          WHERE id = ?'
+    );
+    $stmt->execute([$id]);
+    $product = $stmt->fetch();
+} catch (PDOException $e) {
+    error_log('edit-product.php — PDO error: ' . $e->getMessage());
+    $product = false;
+}
+
+if (!$product) {
+    header('Location: /admin/dashboard.php');
+    exit;
+}
+
 /* ─── State ──────────────────────────────────────────────────────────────── */
 
 $errors      = [];
 $form_values = [
-    'name'        => '',
-    'category'    => '',
-    'subcategory' => '',
-    'country'     => '',
-    'description' => '',
-    'visible'     => '1',
+    'name'        => $product['name'],
+    'category'    => $product['category'],
+    'subcategory' => $product['subcategory'] ?? '',
+    'country'     => $product['country'] ?? '',
+    'description' => $product['description'],
+    'visible'     => (string) (int) $product['visible'],
 ];
+$current_image = $product['image'];
 
 /* ─── Handle POST ────────────────────────────────────────────────────────── */
 
@@ -150,13 +180,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Product description is required.';
         }
 
-        // Handle image upload
-        $image_path = null;
+        // Handle optional image replacement
+        $image_path = $current_image;
         $has_file   = !empty($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE;
 
-        if (!$has_file) {
-            $errors[] = 'A product image is required.';
-        } else {
+        if ($has_file) {
             try {
                 $image_path = upload_product_image($_FILES['image']);
             } catch (RuntimeException $e) {
@@ -164,15 +192,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Insert if no errors
+        // Update if no errors
         if (empty($errors)) {
             try {
                 $pdo  = get_db_connection();
                 $stmt = $pdo->prepare(
-                    'INSERT INTO products
-                       (name, category, subcategory, country, description, image, visible)
-                     VALUES
-                       (?, ?, ?, ?, ?, ?, ?)'
+                    'UPDATE products
+                        SET name = ?, category = ?, subcategory = ?, country = ?,
+                            description = ?, image = ?, visible = ?
+                      WHERE id = ?'
                 );
                 $stmt->execute([
                     $form_values['name'],
@@ -182,14 +210,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $form_values['description'],
                     $image_path,
                     (int) $form_values['visible'],
+                    $id,
                 ]);
 
-                $_SESSION['flash_success'] = '"' . $form_values['name'] . '" was added successfully.';
+                // Remove the old image file if it was replaced
+                if ($image_path !== $current_image) {
+                    $old_file = __DIR__ . '/../' . $current_image;
+                    if (is_file($old_file)) {
+                        unlink($old_file);
+                    }
+                }
+
+                $_SESSION['flash_success'] = '"' . $form_values['name'] . '" was updated successfully.';
                 header('Location: /admin/dashboard.php');
                 exit;
 
             } catch (PDOException $e) {
-                error_log('add-product.php — PDO error: ' . $e->getMessage());
+                error_log('edit-product.php — PDO error: ' . $e->getMessage());
                 $errors[] = 'A database error occurred. Please try again.';
             }
         }
@@ -209,7 +246,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Product — Admin | Abeywardana Distributors</title>
+  <title>Edit Product — Admin | Abeywardana Distributors</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -220,7 +257,6 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 
 <div class="admin-layout">
 
-  <!-- Top Bar -->
   <header class="admin-topbar">
     <span class="admin-topbar__logo">
       <img src="/assets/images/logo.png" alt="Abeywardana Distributors">
@@ -233,7 +269,6 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 
   <div class="admin-body">
 
-    <!-- Sidebar -->
     <aside class="admin-sidebar">
       <nav class="admin-sidebar__nav" aria-label="Admin navigation">
         <a href="/admin/dashboard.php" class="admin-sidebar__link">
@@ -243,7 +278,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
           </svg>
           Dashboard
         </a>
-        <a href="/admin/add-product.php" class="admin-sidebar__link active" aria-current="page">
+        <a href="/admin/add-product.php" class="admin-sidebar__link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
@@ -252,11 +287,10 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
       </nav>
     </aside>
 
-    <!-- Main content -->
     <main class="admin-main" id="main-content">
 
-      <h1 class="admin-page-title">Add New Product</h1>
-      <p class="admin-page-subtitle">Complete all required fields to add a product to the catalogue.</p>
+      <h1 class="admin-page-title">Edit Product</h1>
+      <p class="admin-page-subtitle">Update the fields below and save your changes.</p>
 
       <?php if (!empty($errors)): ?>
         <div class="alert alert-error" role="alert">
@@ -275,7 +309,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
       <form
         class="admin-form"
         method="POST"
-        action="/admin/add-product.php"
+        action="/admin/edit-product.php?id=<?php echo (int) $id; ?>"
         enctype="multipart/form-data"
         novalidate
       >
@@ -369,9 +403,10 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 
         <!-- Image Upload -->
         <div class="form-group">
-          <label class="form-label">
-            Product Image <span class="required" aria-label="required">*</span>
-          </label>
+          <label class="form-label">Product Image</label>
+          <div class="image-preview" id="current-image-preview">
+            <img src="/<?php echo htmlspecialchars($current_image, ENT_QUOTES, 'UTF-8'); ?>" alt="Current product image">
+          </div>
           <div class="image-upload" id="image-drop-zone">
             <label class="image-upload__label" for="image">
               <svg class="image-upload__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -379,15 +414,14 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
                 <circle cx="8.5" cy="8.5" r="1.5"/>
                 <polyline points="21 15 16 10 5 21"/>
               </svg>
-              <span class="image-upload__text">Click to select image</span>
-              <span class="image-upload__hint">JPEG, PNG, or WebP — max 5 MB</span>
+              <span class="image-upload__text">Click to replace image</span>
+              <span class="image-upload__hint">JPEG, PNG, or WebP — max 5 MB. Leave empty to keep the current image.</span>
             </label>
             <input
               type="file"
               id="image"
               name="image"
               accept="image/jpeg,image/png,image/webp"
-              required
             >
           </div>
           <div class="image-preview" id="image-preview" hidden aria-live="polite"></div>
@@ -416,7 +450,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 
         <!-- Actions -->
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Save Product</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
           <a href="/admin/dashboard.php" class="btn btn-ghost">Cancel</a>
         </div>
 
@@ -453,7 +487,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
     ],
   };
 
-  // Preserved value when the form is re-rendered after a validation error
+  // Preserved value on initial load (current product) and after a validation error
   var savedSubcategory = <?php echo json_encode($form_values['subcategory'] ?? ''); ?>;
 
   var categoryEl        = document.getElementById('category');
@@ -463,7 +497,6 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
   function updateSubcategoryOptions(category) {
     var options = SUBCATEGORY_MAP[category] || [];
 
-    // Hide the entire group for sparkling-wine
     if (category === 'sparkling-wine') {
       subcategoryGroup.style.display = 'none';
       subcategoryEl.removeAttribute('required');
@@ -491,7 +524,6 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
     }
   }
 
-  // Initialise on page load (handles re-render after POST validation error)
   if (categoryEl.value) {
     updateSubcategoryOptions(categoryEl.value);
   }
@@ -501,7 +533,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
     updateSubcategoryOptions(this.value);
   });
 
-  /* ── Image preview ──────────────────────────────────────────────────────── */
+  /* ── New image preview ──────────────────────────────────────────────────── */
 
   var imageInput   = document.getElementById('image');
   var imagePreview = document.getElementById('image-preview');

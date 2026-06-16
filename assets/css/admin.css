@@ -26,14 +26,20 @@
 }
 
 .admin-topbar__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--color-text-primary);
   white-space: nowrap;
 }
 
-.admin-topbar__logo span {
-  color: var(--color-gold);
+.admin-topbar__logo img {
+  display: block;
+  width: auto;
+  height: 40px;
+  object-fit: contain;
 }
 
 .admin-topbar__badge {
@@ -449,4 +455,156 @@ select.form-control {
 .status-badge--hidden {
   background-color: var(--color-surface-2);
   color: var(--color-text-muted);
+}
+
+/* ─── Danger Button ──────────────────────────────────────────────────────── */
+
+.btn-danger {
+  background-color: transparent;
+  color: #C0392B;
+  border: 2px solid #F5B8B4;
+}
+
+.btn-danger:hover {
+  background-color: #FEF2F2;
+  border-color: #C0392B;
+}
+
+/* ─── Wide Main (table pages) ────────────────────────────────────────────── */
+
+.admin-main--wide {
+  max-width: 1100px;
+}
+
+.admin-empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* ─── Filter Bar ──────────────────────────────────────────────────────────── */
+
+.admin-filter-bar {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.admin-filter-bar .form-group {
+  margin-bottom: 0;
+  min-width: 160px;
+}
+
+.admin-filter {
+  min-width: 160px;
+}
+
+/* ─── Table Thumbnails & Actions ─────────────────────────────────────────── */
+
+.admin-table__thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: block;
+}
+
+.admin-table__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-table__actions form {
+  display: inline-flex;
+}
+
+/* ─── Login Page ─────────────────────────────────────────────────────────── */
+
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  background-color: var(--color-bg);
+}
+
+.admin-login__card {
+  width: 100%;
+  max-width: 380px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+}
+
+.admin-login__logo {
+  height: 56px;
+  width: auto;
+  margin: 0 auto var(--space-2);
+  display: block;
+}
+
+.admin-login__subtitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-4);
+}
+
+.admin-login__form {
+  text-align: left;
+}
+
+/* ─── Modal Dialog ───────────────────────────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(26, 23, 20, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  z-index: 200;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-4);
+}
+
+.modal-dialog__title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.modal-dialog__message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.modal-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
 }
