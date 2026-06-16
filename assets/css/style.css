@@ -152,6 +152,19 @@ p {
   }
 }
 
+/* ─── Scroll Reveal ──────────────────────────────────────────────────────── */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ─── Navbar ─────────────────────────────────────────────────────────────── */
 
 .navbar {
@@ -813,7 +826,7 @@ p {
 .section-header__title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-gold-dark);
   margin-bottom: var(--space-2);
   letter-spacing: 0.06em;
   line-height: 1.15;
@@ -830,33 +843,50 @@ p {
 .hero {
   padding: var(--space-15) 0;
   background-color: #120d07;
-  background-image:
-    linear-gradient(to right, rgba(10, 7, 3, 0.85) 0%, rgba(10, 7, 3, 0.60) 55%, rgba(10, 7, 3, 0.30) 100%),
-    url('/assets/images/hero-bg.png');
-  background-size: cover;
-  background-position: center;
   border-bottom: 1px solid rgba(201, 168, 76, 0.15);
   position: relative;
   overflow: hidden;
 }
 
-/* Decorative gold circle */
-.hero::after {
+/* Gradient overlay above the rotating background photos */
+.hero::before {
   content: '';
   position: absolute;
-  right: -120px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 520px;
-  height: 520px;
-  border-radius: 50%;
-  border: 48px solid rgba(201, 168, 76, 0.12);
-  pointer-events: none;
+  inset: 0;
+  background-image: linear-gradient(to right, rgba(10, 7, 3, 0.85) 0%, rgba(10, 7, 3, 0.60) 55%, rgba(10, 7, 3, 0.30) 100%);
+  z-index: 1;
+}
+
+/* Rotating background photos */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  z-index: 0;
+}
+
+.hero__bg.is-active {
+  opacity: 1;
+}
+
+.hero__bg--1 {
+  background-image: url('/assets/images/hero-bg.png');
+}
+
+.hero__bg--2 {
+  background-image: url('/assets/images/hero banner 2.png');
+}
+
+.hero__bg--3 {
+  background-image: url('/assets/images/hero banner 3.png');
 }
 
 .hero__inner {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   max-width: 680px;
 }
 
@@ -1162,13 +1192,30 @@ p {
 
 .trust-bar {
   background-color: var(--color-text-primary);
-  line-height: 0;
+  position: relative;
+  aspect-ratio: 1983 / 793;
+  overflow: hidden;
 }
 
-.trust-bar__image {
-  width: 100%;
-  height: auto;
-  display: block;
+.trust-bar__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.trust-bar__bg.is-active {
+  opacity: 1;
+}
+
+.trust-bar__bg--1 {
+  background-image: url('/assets/images/trust-strip.png');
+}
+
+.trust-bar__bg--2 {
+  background-image: url('/assets/images/hero banner 4.png');
 }
 
 /* ─── CTA Section ────────────────────────────────────────────────────────── */
@@ -1183,7 +1230,7 @@ p {
 .cta-section__title {
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-gold-dark);
   letter-spacing: 0.06em;
   margin-bottom: var(--space-2);
 }
