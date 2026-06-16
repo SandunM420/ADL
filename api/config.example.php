@@ -1,6 +1,10 @@
 <?php
 /**
- * Database Configuration
+ * Database Configuration — Template
+ *
+ * Copy this file to config.php and fill in real credentials for the
+ * current environment (local XAMPP, staging, production). config.php
+ * is gitignored so real credentials never get committed.
  *
  * SECURITY: This file contains database credentials.
  * Direct HTTP access is blocked via api/.htaccess.
