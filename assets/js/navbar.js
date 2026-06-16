@@ -6,7 +6,7 @@
     '  <div class="container">',
     '    <div class="navbar__inner">',
 
-    '      <a href="/" class="navbar__logo">Abeywardana <span>Distributors</span></a>',
+    '      <a href="/" class="navbar__logo"><img src="/assets/images/logo.png" alt="Abeywardana Distributors"></a>',
 
     '      <ul class="navbar__nav" role="list">',
     '        <li class="nav-item">',
