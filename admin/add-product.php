@@ -1,0 +1,534 @@
+<?php
+/**
+ * Admin: Add New Product
+ *
+ * Protected page — redirects to login if no valid admin session.
+ * Handles rendering the add-product form and processing its submission.
+ */
+
+session_start();
+
+// Enforce authentication
+if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header('Location: /admin/index.php');
+    exit;
+}
+
+require_once __DIR__ . '/../api/config.php';
+
+/**
+ * Create and return a PDO connection using constants from config.php.
+ *
+ * @return PDO
+ * @throws PDOException
+ */
+function get_db_connection() {
+    $dsn = 'mysql:host=' . DB_HOST
+         . ';dbname=' . DB_NAME
+         . ';charset=' . DB_CHARSET;
+
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+
+    return new PDO($dsn, DB_USER, DB_PASS, $options);
+}
+
+/**
+ * Validate, move, and return the relative path of an uploaded product image.
+ * Checks MIME type via finfo (not file extension) and enforces a 5 MB limit.
+ *
+ * @param  array  $file  Single entry from $_FILES (e.g. $_FILES['image'])
+ * @return string        Relative path suitable for storing in the database
+ * @throws RuntimeException on validation or filesystem failure
+ */
+function upload_product_image($file) {
+    $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp'];
+    $max_bytes          = 5 * 1024 * 1024; // 5 MB
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Upload failed with error code ' . $file['error'] . '.');
+    }
+
+    if ($file['size'] > $max_bytes) {
+        throw new RuntimeException('Image must be 5 MB or smaller.');
+    }
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime  = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    if (!in_array($mime, $allowed_mime_types, true)) {
+        throw new RuntimeException('Unsupported image type. Please upload a JPEG, PNG, or WebP file.');
+    }
+
+    $ext_map = [
+        'image/jpeg' => 'jpg',
+        'image/png'  => 'png',
+        'image/webp' => 'webp',
+    ];
+    $ext        = $ext_map[$mime];
+    $filename   = uniqid('product_', true) . '.' . $ext;
+    $upload_dir = __DIR__ . '/../assets/images/products/';
+    $dest       = $upload_dir . $filename;
+
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    if (!move_uploaded_file($file['tmp_name'], $dest)) {
+        throw new RuntimeException('Could not save uploaded image. Check server write permissions.');
+    }
+
+    return 'assets/images/products/' . $filename;
+}
+
+/* ─── Valid options (used for server-side validation) ──────────────────── */
+
+$valid_categories    = ['wines', 'champagne', 'sparkling-wine', 'spirits'];
+$valid_subcategories = [
+    'chile', 'australia', 'south-africa', 'spain',
+    'france',
+    'whiskey', 'rum', 'gin', 'vodka', 'brandy', 'liquor',
+];
+
+/* ─── State ──────────────────────────────────────────────────────────────── */
+
+$errors      = [];
+$form_values = [
+    'name'        => '',
+    'category'    => '',
+    'subcategory' => '',
+    'country'     => '',
+    'description' => '',
+    'visible'     => '1',
+];
+
+/* ─── Handle POST ────────────────────────────────────────────────────────── */
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // CSRF check
+    if (
+        empty($_POST['csrf_token']) ||
+        !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])
+    ) {
+        $errors[] = 'Invalid request token. Please reload the page and try again.';
+    } else {
+
+        // Read inputs
+        $form_values['name']        = trim($_POST['name']        ?? '');
+        $form_values['category']    = trim($_POST['category']    ?? '');
+        $form_values['subcategory'] = trim($_POST['subcategory'] ?? '');
+        $form_values['country']     = trim($_POST['country']     ?? '');
+        $form_values['description'] = trim($_POST['description'] ?? '');
+        $form_values['visible']     = isset($_POST['visible']) ? '1' : '0';
+
+        // Validate
+        if ($form_values['name'] === '') {
+            $errors[] = 'Product name is required.';
+        }
+
+        if (!in_array($form_values['category'], $valid_categories, true)) {
+            $errors[] = 'Please select a valid category.';
+        }
+
+        if ($form_values['category'] !== 'sparkling-wine') {
+            if (
+                $form_values['subcategory'] === '' ||
+                !in_array($form_values['subcategory'], $valid_subcategories, true)
+            ) {
+                $errors[] = 'Please select a valid subcategory for the chosen category.';
+            }
+        } else {
+            $form_values['subcategory'] = null; // sparkling-wine has no subcategory
+        }
+
+        if ($form_values['description'] === '') {
+            $errors[] = 'Product description is required.';
+        }
+
+        // Handle image upload
+        $image_path = null;
+        $has_file   = !empty($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE;
+
+        if (!$has_file) {
+            $errors[] = 'A product image is required.';
+        } else {
+            try {
+                $image_path = upload_product_image($_FILES['image']);
+            } catch (RuntimeException $e) {
+                $errors[] = $e->getMessage();
+            }
+        }
+
+        // Insert if no errors
+        if (empty($errors)) {
+            try {
+                $pdo  = get_db_connection();
+                $stmt = $pdo->prepare(
+                    'INSERT INTO products
+                       (name, category, subcategory, country, description, image, visible)
+                     VALUES
+                       (?, ?, ?, ?, ?, ?, ?)'
+                );
+                $stmt->execute([
+                    $form_values['name'],
+                    $form_values['category'],
+                    $form_values['subcategory'],
+                    $form_values['country'] !== '' ? $form_values['country'] : null,
+                    $form_values['description'],
+                    $image_path,
+                    (int) $form_values['visible'],
+                ]);
+
+                $_SESSION['flash_success'] = '"' . $form_values['name'] . '" was added successfully.';
+                header('Location: /admin/dashboard.php');
+                exit;
+
+            } catch (PDOException $e) {
+                error_log('add-product.php — PDO error: ' . $e->getMessage());
+                $errors[] = 'A database error occurred. Please try again.';
+            }
+        }
+    }
+}
+
+// Generate CSRF token once per session
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrf_token = $_SESSION['csrf_token'];
+
+$admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_QUOTES, 'UTF-8');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product — Admin | Abeywardana Distributors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- Top Bar -->
+  <header class="admin-topbar">
+    <span class="admin-topbar__logo">Abeywardana <span>Distributors</span></span>
+    <span class="admin-topbar__badge">Admin Portal</span>
+    <div class="admin-topbar__spacer"></div>
+    <span class="admin-topbar__user"><?php echo $admin_username; ?></span>
+    <a href="/admin/logout.php" class="admin-topbar__logout">Log out</a>
+  </header>
+
+  <div class="admin-body">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <nav class="admin-sidebar__nav" aria-label="Admin navigation">
+        <a href="/admin/dashboard.php" class="admin-sidebar__link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="/admin/add-product.php" class="admin-sidebar__link active" aria-current="page">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Product
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="admin-main" id="main-content">
+
+      <h1 class="admin-page-title">Add New Product</h1>
+      <p class="admin-page-subtitle">Complete all required fields to add a product to the catalogue.</p>
+
+      <?php if (!empty($errors)): ?>
+        <div class="alert alert-error" role="alert">
+          <?php if (count($errors) === 1): ?>
+            <?php echo htmlspecialchars($errors[0], ENT_QUOTES, 'UTF-8'); ?>
+          <?php else: ?>
+            <ul>
+              <?php foreach ($errors as $error): ?>
+                <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+              <?php endforeach; ?>
+            </ul>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+      <form
+        class="admin-form"
+        method="POST"
+        action="/admin/add-product.php"
+        enctype="multipart/form-data"
+        novalidate
+      >
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
+
+        <!-- Product Name -->
+        <div class="form-group">
+          <label class="form-label" for="name">
+            Product Name <span class="required" aria-label="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            value="<?php echo htmlspecialchars($form_values['name'], ENT_QUOTES, 'UTF-8'); ?>"
+            placeholder="e.g. Concha y Toro Casillero del Diablo Reserva"
+            required
+            maxlength="255"
+            autocomplete="off"
+          >
+        </div>
+
+        <!-- Category & Subcategory -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="category">
+              Category <span class="required" aria-label="required">*</span>
+            </label>
+            <select id="category" name="category" class="form-control" required>
+              <option value="">— Select category —</option>
+              <option value="wines"
+                <?php echo $form_values['category'] === 'wines' ? 'selected' : ''; ?>>
+                Wines
+              </option>
+              <option value="champagne"
+                <?php echo $form_values['category'] === 'champagne' ? 'selected' : ''; ?>>
+                Champagne
+              </option>
+              <option value="sparkling-wine"
+                <?php echo $form_values['category'] === 'sparkling-wine' ? 'selected' : ''; ?>>
+                Sparkling Wine
+              </option>
+              <option value="spirits"
+                <?php echo $form_values['category'] === 'spirits' ? 'selected' : ''; ?>>
+                Spirits
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group" id="subcategory-group">
+            <label class="form-label" for="subcategory">
+              Subcategory <span class="required" aria-label="required" id="subcategory-req">*</span>
+            </label>
+            <select id="subcategory" name="subcategory" class="form-control">
+              <option value="">— Select category first —</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Country of Origin -->
+        <div class="form-group">
+          <label class="form-label" for="country">Country of Origin</label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            class="form-control"
+            value="<?php echo htmlspecialchars($form_values['country'], ENT_QUOTES, 'UTF-8'); ?>"
+            placeholder="e.g. Chile, Scotland, France  (optional)"
+            maxlength="100"
+            autocomplete="off"
+          >
+          <p class="form-hint">Displayed on the product detail page only — not used for filtering.</p>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="description">
+            Description <span class="required" aria-label="required">*</span>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-control"
+            rows="5"
+            placeholder="Enter a detailed product description…"
+            required
+          ><?php echo htmlspecialchars($form_values['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group">
+          <label class="form-label">
+            Product Image <span class="required" aria-label="required">*</span>
+          </label>
+          <div class="image-upload" id="image-drop-zone">
+            <label class="image-upload__label" for="image">
+              <svg class="image-upload__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span class="image-upload__text">Click to select image</span>
+              <span class="image-upload__hint">JPEG, PNG, or WebP — max 5 MB</span>
+            </label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/jpeg,image/png,image/webp"
+              required
+            >
+          </div>
+          <div class="image-preview" id="image-preview" hidden aria-live="polite"></div>
+        </div>
+
+        <!-- Visibility -->
+        <div class="form-group">
+          <label class="form-label">Visibility</label>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input
+                type="checkbox"
+                id="visible"
+                name="visible"
+                value="1"
+                <?php echo $form_values['visible'] === '1' ? 'checked' : ''; ?>
+                aria-describedby="visible-label"
+              >
+              <span class="toggle__slider"></span>
+            </label>
+            <span class="toggle__label" id="visible-label">
+              <?php echo $form_values['visible'] === '1' ? 'Visible on website' : 'Hidden from website'; ?>
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save Product</button>
+          <a href="/admin/dashboard.php" class="btn btn-ghost">Cancel</a>
+        </div>
+
+      </form>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Cascading subcategory dropdown ────────────────────────────────────── */
+
+  var SUBCATEGORY_MAP = {
+    wines: [
+      { value: 'chile',        label: 'Chile' },
+      { value: 'australia',    label: 'Australia' },
+      { value: 'south-africa', label: 'South Africa' },
+      { value: 'spain',        label: 'Spain' },
+    ],
+    champagne: [
+      { value: 'france', label: 'France' },
+    ],
+    'sparkling-wine': [],
+    spirits: [
+      { value: 'whiskey', label: 'Whiskey' },
+      { value: 'rum',     label: 'Rum' },
+      { value: 'gin',     label: 'Gin' },
+      { value: 'vodka',   label: 'Vodka' },
+      { value: 'brandy',  label: 'Brandy' },
+      { value: 'liquor',  label: 'Liquor' },
+    ],
+  };
+
+  // Preserved value when the form is re-rendered after a validation error
+  var savedSubcategory = <?php echo json_encode($form_values['subcategory'] ?? ''); ?>;
+
+  var categoryEl        = document.getElementById('category');
+  var subcategoryEl     = document.getElementById('subcategory');
+  var subcategoryGroup  = document.getElementById('subcategory-group');
+
+  function updateSubcategoryOptions(category) {
+    var options = SUBCATEGORY_MAP[category] || [];
+
+    // Hide the entire group for sparkling-wine
+    if (category === 'sparkling-wine') {
+      subcategoryGroup.style.display = 'none';
+      subcategoryEl.removeAttribute('required');
+      subcategoryEl.value = '';
+      return;
+    }
+
+    subcategoryGroup.style.display = '';
+    subcategoryEl.setAttribute('required', '');
+    subcategoryEl.innerHTML = '';
+
+    var placeholder = document.createElement('option');
+    placeholder.value       = '';
+    placeholder.textContent = '— Select subcategory —';
+    subcategoryEl.appendChild(placeholder);
+
+    for (var i = 0; i < options.length; i++) {
+      var opt       = document.createElement('option');
+      opt.value     = options[i].value;
+      opt.textContent = options[i].label;
+      if (options[i].value === savedSubcategory) {
+        opt.selected = true;
+      }
+      subcategoryEl.appendChild(opt);
+    }
+  }
+
+  // Initialise on page load (handles re-render after POST validation error)
+  if (categoryEl.value) {
+    updateSubcategoryOptions(categoryEl.value);
+  }
+
+  categoryEl.addEventListener('change', function () {
+    savedSubcategory = '';
+    updateSubcategoryOptions(this.value);
+  });
+
+  /* ── Image preview ──────────────────────────────────────────────────────── */
+
+  var imageInput   = document.getElementById('image');
+  var imagePreview = document.getElementById('image-preview');
+
+  imageInput.addEventListener('change', function () {
+    var file = this.files[0];
+    if (!file) {
+      imagePreview.hidden = true;
+      imagePreview.innerHTML = '';
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      imagePreview.hidden = false;
+      imagePreview.innerHTML = '<img src="' + e.target.result + '" alt="Selected image preview">';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ── Visibility toggle label ────────────────────────────────────────────── */
+
+  var visibleInput = document.getElementById('visible');
+  var visibleLabel = document.getElementById('visible-label');
+
+  visibleInput.addEventListener('change', function () {
+    visibleLabel.textContent = this.checked ? 'Visible on website' : 'Hidden from website';
+  });
+}());
+</script>
+
+</body>
+</html>

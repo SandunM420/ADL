@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Abeywardana Distributors</title>
+  <meta name="description" content="Get in touch with Abeywardana Distributors for trade pricing, product enquiries, and distribution partnerships.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .contact-section { padding: var(--space-15) 0; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+    @media (min-width: 768px) {
+      .contact-grid { grid-template-columns: 3fr 2fr; }
+    }
+    .contact-form-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-4);
+    }
+    .form-group { margin-bottom: var(--space-3); }
+    .form-label {
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 6px;
+    }
+    .form-label .req { color: #C0392B; margin-left: 2px; }
+    .form-control {
+      display: block;
+      width: 100%;
+      padding: 10px var(--space-2);
+      font-size: var(--font-size-sm);
+      font-family: var(--font-family);
+      color: var(--color-text-primary);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-gold);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.16);
+    }
+    .form-control::placeholder { color: var(--color-text-muted); }
+    textarea.form-control { resize: vertical; min-height: 130px; line-height: 1.6; }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+    @media (min-width: 480px) { .form-row { grid-template-columns: 1fr 1fr; } }
+    .contact-info { display: flex; flex-direction: column; gap: var(--space-4); }
+    .contact-info-item {
+      display: flex;
+      gap: var(--space-2);
+      align-items: flex-start;
+    }
+    .contact-info-item__icon {
+      width: 40px;
+      height: 40px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-info-item__label {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 3px;
+    }
+    .contact-info-item__value {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+    .alert {
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      margin-bottom: var(--space-3);
+      border: 1px solid;
+    }
+    .alert-success { background: #F0FAF4; border-color: #A3D9B1; color: #1A6B35; }
+    .alert-error   { background: #FEF2F2; border-color: #F5B8B4; color: #9B1C1C; }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main id="main-content">
+
+    <header class="page-header">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb__sep" aria-hidden="true">/</span>
+          <span aria-current="page">Contact Us</span>
+        </nav>
+        <p class="page-header__eyebrow">Get in Touch</p>
+        <h1 class="page-header__title">Contact Us</h1>
+        <p class="page-header__subtitle">Trade enquiries, product availability, pricing — we're here to help.</p>
+      </div>
+    </header>
+
+    <section class="contact-section">
+      <div class="container">
+        <div class="contact-grid">
+
+          <!-- Form -->
+          <div class="contact-form-card">
+
+            <div id="form-alert" hidden></div>
+
+            <form id="contact-form" method="POST" action="/contact-handler.php" novalidate>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="name">Name <span class="req" aria-label="required">*</span></label>
+                  <input type="text" id="name" name="name" class="form-control" placeholder="Your full name" required maxlength="100" autocomplete="name">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="email">Email <span class="req" aria-label="required">*</span></label>
+                  <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required maxlength="150" autocomplete="email">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="company">Company / Hotel</label>
+                  <input type="text" id="company" name="company" class="form-control" placeholder="Your company name" maxlength="150" autocomplete="organization">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="phone">Phone</label>
+                  <input type="tel" id="phone" name="phone" class="form-control" placeholder="+94 77 000 0000" maxlength="20" autocomplete="tel">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="product">Product of Interest</label>
+                <input type="text" id="product" name="product" class="form-control" placeholder="e.g. Casillero del Diablo, Johnnie Walker Black" maxlength="200">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="message">Message <span class="req" aria-label="required">*</span></label>
+                <textarea id="message" name="message" class="form-control" rows="5" placeholder="Tell us what you're looking for…" required maxlength="2000"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full">Send Enquiry</button>
+
+            </form>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="contact-info">
+            <div>
+              <p class="page-header__eyebrow" style="margin-bottom: var(--space-2);">How to Reach Us</p>
+              <p style="font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.7;">
+                Fill in the form or reach out directly. We respond to all trade enquiries within one business day.
+              </p>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon" aria-hidden="true">📍</div>
+              <div>
+                <div class="contact-info-item__label">Address</div>
+                <div class="contact-info-item__value">Colombo, Sri Lanka<br><span class="text-muted">(Full address TBC)</span></div>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon" aria-hidden="true">📞</div>
+              <div>
+                <div class="contact-info-item__label">Phone</div>
+                <div class="contact-info-item__value">+94 XX XXX XXXX<br><span class="text-muted">(TBC)</span></div>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon" aria-hidden="true">✉️</div>
+              <div>
+                <div class="contact-info-item__label">Email</div>
+                <div class="contact-info-item__value">info@abeywardana.lk<br><span class="text-muted">(TBC)</span></div>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon" aria-hidden="true">🕐</div>
+              <div>
+                <div class="contact-info-item__label">Hours</div>
+                <div class="contact-info-item__value">Mon – Fri: 9:00am – 6:00pm<br>Sat: 9:00am – 1:00pm</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo">Abeywardana <span>Distributors</span></div>
+          <p class="footer__desc">Premium alcoholic and non-alcoholic beverage importer and distributor, serving Sri Lanka island-wide.</p>
+        </div>
+        <div>
+          <p class="footer__heading">Products</p>
+          <ul class="footer__links">
+            <li><a href="/wines/chile.html">Chilean Wines</a></li>
+            <li><a href="/wines/australia.html">Australian Wines</a></li>
+            <li><a href="/champagne/france.html">Champagne</a></li>
+            <li><a href="/sparkling-wine/index.html">Sparkling Wine</a></li>
+            <li><a href="/spirits/whiskey.html">Spirits</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer__heading">Company</p>
+          <ul class="footer__links">
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2025 Abeywardana Distributors (Pvt) Ltd. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/navbar.js"></script>
+  <script>
+    (function () {
+      /* Pre-fill product field from URL ?product= param */
+      var params  = new URLSearchParams(window.location.search);
+      var product = params.get('product');
+      if (product) {
+        var el = document.getElementById('product');
+        if (el) el.value = product;
+      }
+
+      /* Show success/error flash from redirect */
+      var success = params.get('success');
+      var error   = params.get('error');
+      var alert   = document.getElementById('form-alert');
+      if (success === '1') {
+        alert.className = 'alert alert-success';
+        alert.textContent = 'Your enquiry has been sent. We\'ll be in touch shortly.';
+        alert.hidden = false;
+      } else if (error) {
+        alert.className = 'alert alert-error';
+        alert.textContent = decodeURIComponent(error);
+        alert.hidden = false;
+      }
+    }());
+  </script>
+
+</body>
+</html>

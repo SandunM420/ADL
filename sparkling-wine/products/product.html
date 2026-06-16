@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Product — Abeywardana Distributors</title>
+  <meta name="description" id="page-desc" content="Product details — Abeywardana Distributors">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .product-detail { padding: var(--space-8) 0 var(--space-15); }
+    .product-detail__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      align-items: start;
+    }
+    @media (min-width: 768px) {
+      .product-detail__grid { grid-template-columns: 5fr 7fr; gap: var(--space-8); }
+    }
+    .product-detail__image-wrap {
+      aspect-ratio: 3 / 4;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .product-detail__image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .product-detail__info { display: flex; flex-direction: column; gap: var(--space-3); }
+    .product-detail__name {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .product-detail__meta {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .product-detail__meta-row { display: flex; gap: var(--space-2); font-size: var(--font-size-sm); }
+    .product-detail__meta-label { font-weight: 600; color: var(--color-text-secondary); min-width: 100px; flex-shrink: 0; }
+    .product-detail__meta-value { color: var(--color-text-secondary); }
+    .product-detail__divider { height: 1px; background: var(--color-border); }
+    .product-detail__desc { font-size: var(--font-size-base); line-height: 1.8; color: var(--color-text-secondary); }
+    .product-detail__actions { display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center; }
+    .product-detail__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color var(--transition-fast);
+    }
+    .product-detail__back:hover { color: var(--color-gold-dark); }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main id="main-content">
+
+    <!-- breadcrumb rendered by JS -->
+    <div id="breadcrumb-area" class="page-header" style="padding-bottom: var(--space-4);">
+      <div class="container">
+        <div class="spinner" role="status" aria-label="Loading"><div class="spinner__ring" style="width:32px;height:32px;border-width:2px;"></div></div>
+      </div>
+    </div>
+
+    <div class="product-detail">
+      <div class="container">
+        <div id="product-area" aria-live="polite" aria-atomic="true">
+          <div class="spinner" role="status" aria-label="Loading product">
+            <div class="spinner__ring"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo">Abeywardana <span>Distributors</span></div>
+          <p class="footer__desc">Premium alcoholic and non-alcoholic beverage importer and distributor, serving Sri Lanka island-wide.</p>
+        </div>
+        <div>
+          <p class="footer__heading">Products</p>
+          <ul class="footer__links">
+            <li><a href="/wines/chile.html">Chilean Wines</a></li>
+            <li><a href="/wines/australia.html">Australian Wines</a></li>
+            <li><a href="/champagne/france.html">Champagne</a></li>
+            <li><a href="/sparkling-wine/index.html">Sparkling Wine</a></li>
+            <li><a href="/spirits/whiskey.html">Spirits</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer__heading">Company</p>
+          <ul class="footer__links">
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2025 Abeywardana Distributors (Pvt) Ltd. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/navbar.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var CATEGORY_META = {
+        'wines:chile':        { catLabel: 'Wines', subLabel: 'Chile',        backUrl: '/wines/chile.html' },
+        'wines:australia':    { catLabel: 'Wines', subLabel: 'Australia',    backUrl: '/wines/australia.html' },
+        'wines:south-africa': { catLabel: 'Wines', subLabel: 'South Africa', backUrl: '/wines/south-africa.html' },
+        'wines:spain':        { catLabel: 'Wines', subLabel: 'Spain',        backUrl: '/wines/spain.html' },
+        'champagne:france':   { catLabel: 'Champagne', subLabel: 'France',   backUrl: '/champagne/france.html' },
+        'sparkling-wine:':    { catLabel: 'Sparkling Wine', subLabel: null,  backUrl: '/sparkling-wine/index.html' },
+        'spirits:whiskey':    { catLabel: 'Spirits', subLabel: 'Whiskey',    backUrl: '/spirits/whiskey.html' },
+        'spirits:rum':        { catLabel: 'Spirits', subLabel: 'Rum',        backUrl: '/spirits/rum.html' },
+        'spirits:gin':        { catLabel: 'Spirits', subLabel: 'Gin',        backUrl: '/spirits/gin.html' },
+        'spirits:vodka':      { catLabel: 'Spirits', subLabel: 'Vodka',      backUrl: '/spirits/vodka.html' },
+        'spirits:brandy':     { catLabel: 'Spirits', subLabel: 'Brandy',     backUrl: '/spirits/brandy.html' },
+        'spirits:liquor':     { catLabel: 'Spirits', subLabel: 'Liquor',     backUrl: '/spirits/liquor.html' },
+      };
+
+      function escHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function renderBreadcrumb(product) {
+        var key  = product.category + ':' + (product.subcategory || '');
+        var meta = CATEGORY_META[key] || { catLabel: product.category, subLabel: product.subcategory, backUrl: '/' };
+
+        var crumbs = '<a href="/">Home</a><span class="breadcrumb__sep" aria-hidden="true">/</span>';
+        crumbs += '<span>' + escHtml(meta.catLabel) + '</span>';
+        if (meta.subLabel) {
+          crumbs += '<span class="breadcrumb__sep" aria-hidden="true">/</span>';
+          crumbs += '<a href="' + meta.backUrl + '">' + escHtml(meta.subLabel) + '</a>';
+        }
+        crumbs += '<span class="breadcrumb__sep" aria-hidden="true">/</span>';
+        crumbs += '<span aria-current="page">' + escHtml(product.name) + '</span>';
+
+        document.getElementById('breadcrumb-area').innerHTML =
+          '<div class="container"><nav class="breadcrumb" aria-label="Breadcrumb">' + crumbs + '</nav></div>';
+      }
+
+      function renderProduct(product) {
+        var imgSrc = product.image
+          ? '/' + escHtml(product.image)
+          : '/assets/images/products/placeholder.jpg';
+
+        var key     = product.category + ':' + (product.subcategory || '');
+        var meta    = CATEGORY_META[key] || { catLabel: product.category, subLabel: product.subcategory, backUrl: '/' };
+        var backLabel = meta.subLabel || meta.catLabel;
+        var enquiryUrl = '/contact.html?product=' + encodeURIComponent(product.name);
+
+        var metaRows = '';
+        if (product.country) {
+          metaRows += '<div class="product-detail__meta-row"><span class="product-detail__meta-label">Country</span><span class="product-detail__meta-value">' + escHtml(product.country) + '</span></div>';
+        }
+        metaRows += '<div class="product-detail__meta-row"><span class="product-detail__meta-label">Category</span><span class="product-detail__meta-value">' + escHtml(meta.catLabel) + (meta.subLabel ? ' — ' + escHtml(meta.subLabel) : '') + '</span></div>';
+
+        document.getElementById('product-area').innerHTML =
+          '<div class="product-detail__grid">' +
+            '<div class="product-detail__image-wrap">' +
+              '<img src="' + imgSrc + '" alt="' + escHtml(product.name) + '" width="400" height="533">' +
+            '</div>' +
+            '<div class="product-detail__info">' +
+              '<span class="product-card__badge">' + escHtml(meta.subLabel || meta.catLabel) + '</span>' +
+              '<h1 class="product-detail__name">' + escHtml(product.name) + '</h1>' +
+              (metaRows ? '<div class="product-detail__meta">' + metaRows + '</div>' : '') +
+              '<div class="product-detail__divider"></div>' +
+              '<p class="product-detail__desc">' + escHtml(product.description) + '</p>' +
+              '<div class="product-detail__divider"></div>' +
+              '<div class="product-detail__actions">' +
+                '<a href="' + enquiryUrl + '" class="btn btn-primary">Enquire Now</a>' +
+                '<a href="' + meta.backUrl + '" class="product-detail__back">' +
+                  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>' +
+                  'Back to ' + escHtml(backLabel) +
+                '</a>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      }
+
+      function renderError() {
+        document.getElementById('breadcrumb-area').innerHTML = '';
+        document.getElementById('product-area').innerHTML =
+          '<div class="empty-state">' +
+            '<p class="empty-state__title">Product not found</p>' +
+            '<p class="empty-state__text">This product may have been removed. <a href="/">Browse our collection</a>.</p>' +
+          '</div>';
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      var id     = parseInt(params.get('id'), 10);
+
+      if (!id || id <= 0) {
+        renderError();
+      } else {
+        fetch('/api/product.php?id=' + id)
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data.error) throw new Error(data.error);
+            document.title = data.name + ' — Abeywardana Distributors';
+            document.getElementById('page-desc').content = data.description ? data.description.substring(0, 155) : '';
+            renderBreadcrumb(data);
+            renderProduct(data);
+          })
+          .catch(renderError);
+      }
+    }());
+  </script>
+
+</body>
+</html>

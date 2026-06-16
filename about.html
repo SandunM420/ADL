@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Abeywardana Distributors</title>
+  <meta name="description" content="Learn about Abeywardana Distributors — Sri Lanka's trusted importer and distributor of premium wines, champagnes, and spirits.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .about-section { padding: var(--space-15) 0; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+    @media (min-width: 768px) {
+      .about-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .about-decorative {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8) var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .about-stat { border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-3); }
+    .about-stat:last-child { border-bottom: none; padding-bottom: 0; }
+    .about-stat__value {
+      font-size: var(--font-size-3xl);
+      font-weight: 700;
+      color: var(--color-gold-dark);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .about-stat__label { font-size: var(--font-size-sm); color: var(--color-text-muted); }
+    .about-body { display: flex; flex-direction: column; gap: var(--space-4); }
+    .about-body h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 600; letter-spacing: 0.06em; }
+    .about-body p { font-size: var(--font-size-base); line-height: 1.8; }
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+    @media (min-width: 640px) { .values-grid { grid-template-columns: repeat(3, 1fr); } }
+    .value-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+    }
+    .value-card__icon { font-size: 1.75rem; margin-bottom: var(--space-2); }
+    .value-card__title { font-size: var(--font-size-base); font-weight: 700; margin-bottom: 6px; }
+    .value-card__text { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main id="main-content">
+
+    <header class="page-header">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb__sep" aria-hidden="true">/</span>
+          <span aria-current="page">About Us</span>
+        </nav>
+        <p class="page-header__eyebrow">Our Story</p>
+        <h1 class="page-header__title">About Us</h1>
+        <p class="page-header__subtitle">Sri Lanka's trusted partner for premium wines, champagnes, and spirits.</p>
+      </div>
+    </header>
+
+    <!-- Company Story -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-grid">
+
+          <div class="about-decorative">
+            <div class="about-stat">
+              <div class="about-stat__value">20+</div>
+              <div class="about-stat__label">Premium Labels in Our Portfolio</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat__value">4</div>
+              <div class="about-stat__label">Wine Regions Represented</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat__value">Island-Wide</div>
+              <div class="about-stat__label">Distribution Across Sri Lanka</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat__value">B2B &amp; B2C</div>
+              <div class="about-stat__label">Hotels, Restaurants &amp; Retail</div>
+            </div>
+          </div>
+
+          <div class="about-body">
+            <div>
+              <p class="page-header__eyebrow" style="margin-bottom: var(--space-1);">Who We Are</p>
+              <h2>Sri Lanka's Trusted Beverage Partner</h2>
+            </div>
+            <p>
+              Abeywardana Distributors (Pvt) Ltd is a leading importer and distributor of premium
+              alcoholic and non-alcoholic beverages in Sri Lanka. We specialise in sourcing
+              exceptional wines, champagnes, and spirits from the world's most prestigious
+              producing regions and bringing them to the Sri Lankan market.
+            </p>
+            <p>
+              Our portfolio spans wines from Chile, Australia, South Africa, and Spain; authentic
+              French champagnes; sparkling wines; and a comprehensive range of spirits including
+              whiskey, rum, gin, vodka, brandy, and liqueurs. Every label in our collection is
+              carefully selected for quality, consistency, and value.
+            </p>
+            <p>
+              We serve the full spectrum of the Sri Lankan beverage market — from five-star hotels
+              and award-winning restaurants to neighbourhood retailers and individual consumers —
+              with island-wide distribution and dedicated trade support.
+            </p>
+            <a href="/contact.html" class="btn btn-primary" style="align-self: flex-start; margin-top: var(--space-1);">Get in Touch</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section class="section" style="background: var(--color-surface-2); border-top: 1px solid var(--color-border);">
+      <div class="container">
+        <div class="section-header section-header--center">
+          <p class="section-header__eyebrow">What Drives Us</p>
+          <h2 class="section-header__title">Our Values</h2>
+        </div>
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-card__icon" aria-hidden="true">🏆</div>
+            <h3 class="value-card__title">Quality First</h3>
+            <p class="value-card__text">Every product in our portfolio is selected on merit. We only distribute labels we believe in.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card__icon" aria-hidden="true">🤝</div>
+            <h3 class="value-card__title">Trusted Partnerships</h3>
+            <p class="value-card__text">We build long-term relationships with our clients, understanding their needs and growing together.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card__icon" aria-hidden="true">🌏</div>
+            <h3 class="value-card__title">Global Reach, Local Focus</h3>
+            <p class="value-card__text">We bring the world's finest beverages to Sri Lanka, tailored to the local palate and market.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-section__title">Want to Carry Our Products?</h2>
+        <p class="cta-section__subtitle">Reach out to discuss trade pricing, distribution, or any enquiries about our collection.</p>
+        <div class="cta-section__actions">
+          <a href="/contact.html" class="btn btn-primary">Contact Us</a>
+          <a href="/" class="btn btn-ghost">Browse Collection</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo">Abeywardana <span>Distributors</span></div>
+          <p class="footer__desc">Premium alcoholic and non-alcoholic beverage importer and distributor, serving Sri Lanka island-wide.</p>
+        </div>
+        <div>
+          <p class="footer__heading">Products</p>
+          <ul class="footer__links">
+            <li><a href="/wines/chile.html">Chilean Wines</a></li>
+            <li><a href="/wines/australia.html">Australian Wines</a></li>
+            <li><a href="/champagne/france.html">Champagne</a></li>
+            <li><a href="/sparkling-wine/index.html">Sparkling Wine</a></li>
+            <li><a href="/spirits/whiskey.html">Spirits</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer__heading">Company</p>
+          <ul class="footer__links">
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2025 Abeywardana Distributors (Pvt) Ltd. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/navbar.js"></script>
+
+</body>
+</html>

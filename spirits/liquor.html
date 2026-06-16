@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquor — Abeywardana Distributors</title>
+  <meta name="description" content="An exquisite selection of premium liqueurs and specialty spirits.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+  <main id="main-content">
+    <header class="page-header">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a><span class="breadcrumb__sep" aria-hidden="true">/</span>
+          <span>Spirits</span><span class="breadcrumb__sep" aria-hidden="true">/</span>
+          <span aria-current="page">Liquor</span>
+        </nav>
+        <p class="page-header__eyebrow">Spirits</p>
+        <h1 class="page-header__title">Liquor</h1>
+        <p class="page-header__subtitle">An exquisite selection of premium liqueurs and specialty spirits.</p>
+      </div>
+    </header>
+    <section class="section" aria-label="Product catalogue">
+      <div class="container">
+        <div id="product-area" aria-live="polite" aria-atomic="true">
+          <div class="spinner" role="status" aria-label="Loading products"><div class="spinner__ring"></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div><div class="footer__logo">Abeywardana <span>Distributors</span></div><p class="footer__desc">Premium beverage importer and distributor, serving Sri Lanka island-wide.</p></div>
+        <div><p class="footer__heading">Products</p><ul class="footer__links"><li><a href="/wines/chile.html">Chilean Wines</a></li><li><a href="/champagne/france.html">Champagne</a></li><li><a href="/spirits/whiskey.html">Whiskey</a></li><li><a href="/spirits/rum.html">Rum</a></li><li><a href="/spirits/liquor.html">Liquor</a></li></ul></div>
+        <div><p class="footer__heading">Company</p><ul class="footer__links"><li><a href="/about.html">About Us</a></li><li><a href="/contact.html">Contact Us</a></li></ul></div>
+      </div>
+      <div class="footer__bottom"><span>&copy; 2025 Abeywardana Distributors (Pvt) Ltd. All rights reserved.</span></div>
+    </div>
+  </footer>
+  <script src="../assets/js/navbar.js"></script>
+  <script>
+    window.PAGE_CONFIG = { category: 'spirits', subcategory: 'liquor', badge: 'Liquor', productUrlPrefix: '/spirits/products/product.html' };
+  </script>
+  <script src="../assets/js/products.js"></script>
+</body>
+</html>
