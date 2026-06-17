@@ -42,7 +42,7 @@ $db_error  = '';
 try {
     $pdo  = get_db_connection();
     $stmt = $pdo->query(
-        'SELECT id, name, category, subcategory, country, image, visible, created_at
+        'SELECT id, name, item_code, grape_type, category, subcategory, country, image, visible, created_at
            FROM products
           ORDER BY created_at DESC'
     );

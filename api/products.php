@@ -66,7 +66,7 @@ try {
     if ($subcategory !== null && $subcategory !== '') {
         // Filter by both category and subcategory
         $stmt = $pdo->prepare(
-            'SELECT id, name, category, subcategory, country, description, image, visible, created_at
+            'SELECT id, name, item_code, grape_type, alcohol, pack_size, category, subcategory, country, description, image, visible, created_at
                FROM products
               WHERE category = ?
                 AND subcategory = ?
@@ -77,7 +77,7 @@ try {
     } else {
         // Sparkling Wine and any category without a subcategory filter
         $stmt = $pdo->prepare(
-            'SELECT id, name, category, subcategory, country, description, image, visible, created_at
+            'SELECT id, name, item_code, grape_type, alcohol, pack_size, category, subcategory, country, description, image, visible, created_at
                FROM products
               WHERE category = ?
                 AND visible = 1

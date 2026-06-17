@@ -10,6 +10,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <style>
+    .contact-hero {
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      background-color: #120d07;
+      background-image: linear-gradient(to right, rgba(10, 7, 3, 0.85) 0%, rgba(10, 7, 3, 0.60) 55%, rgba(10, 7, 3, 0.30) 100%), url('/assets/images/hero-bg.png');
+      background-size: 100% 100%, auto 122%;
+      background-position: center, right center;
+      background-repeat: no-repeat;
+      border-bottom-color: rgba(201, 168, 76, 0.15);
+    }
+    .contact-hero .page-header__title {
+      color: #FFFFFF;
+    }
+    .contact-hero .page-header__subtitle {
+      color: rgba(255, 255, 255, 0.78);
+    }
+    .contact-hero .breadcrumb {
+      color: rgba(255, 255, 255, 0.66);
+    }
+    .contact-hero .breadcrumb a {
+      color: rgba(255, 255, 255, 0.66);
+    }
+    .contact-hero .breadcrumb a:hover {
+      color: var(--color-gold);
+    }
     .contact-section { padding: var(--space-15) 0; }
     .contact-grid {
       display: grid;
@@ -123,7 +150,7 @@
 
   <main id="main-content">
 
-    <header class="page-header">
+    <header class="page-header contact-hero">
       <div class="container">
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <a href="/">Home</a>
@@ -288,6 +315,26 @@
         alert.className = 'alert alert-error';
         alert.textContent = decodeURIComponent(error);
         alert.hidden = false;
+      }
+
+      var form = document.getElementById('contact-form');
+      if (form) {
+        form.addEventListener('submit', function (event) {
+          var requiredFields = [
+            document.getElementById('name'),
+            document.getElementById('email'),
+            document.getElementById('message')
+          ];
+          var firstMissing = requiredFields.find(function (field) {
+            return field && field.value.trim() === '';
+          });
+
+          if (firstMissing) {
+            event.preventDefault();
+            window.alert('Please fill your name, email and your enquiry.');
+            firstMissing.focus();
+          }
+        });
       }
     }());
   </script>

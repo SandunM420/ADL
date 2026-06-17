@@ -7,6 +7,10 @@
 CREATE TABLE IF NOT EXISTS products (
   id            INT AUTO_INCREMENT PRIMARY KEY,
   name          VARCHAR(255)  NOT NULL,
+  item_code     VARCHAR(100)  NULL,
+  grape_type    VARCHAR(150)  NULL,
+  alcohol       VARCHAR(100)  NULL,
+  pack_size     VARCHAR(100)  NULL,
   category      VARCHAR(100)  NOT NULL,
   subcategory   VARCHAR(100)  NULL,
   country       VARCHAR(100)  NULL,

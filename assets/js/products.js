@@ -26,12 +26,19 @@
       ? '/' + escHtml(product.image)
       : '/assets/images/products/placeholder.jpg';
 
-    var countryHtml = product.country
-      ? '<p class="product-card__country">' + escHtml(product.country) + '</p>'
-      : '';
-
     var productUrl = PRODUCT_URL_BASE + '?id=' + encodeURIComponent(product.id);
-    var enquiryUrl = '/contact.html?product=' + encodeURIComponent(product.name);
+    var gradeTypeHtml = product.grape_type
+      ? '<div class="product-card__detail"><span class="product-card__detail-label">Grape Type</span><span class="product-card__detail-value">' + escHtml(product.grape_type) + '</span></div>'
+      : '';
+    var alcoholHtml = product.alcohol
+      ? '<div class="product-card__detail"><span class="product-card__detail-label">Alcohol</span><span class="product-card__detail-value">' + escHtml(product.alcohol) + '</span></div>'
+      : '';
+    var packSizeHtml = product.pack_size
+      ? '<div class="product-card__detail"><span class="product-card__detail-label">Pack Size</span><span class="product-card__detail-value">' + escHtml(product.pack_size) + '</span></div>'
+      : '';
+    var tastingNoteHtml = product.description
+      ? '<div class="product-card__detail"><span class="product-card__detail-label">Tasting Note</span><span class="product-card__detail-value">' + escHtml(product.description) + '</span></div>'
+      : '';
 
     return (
       '<article class="product-card">' +
@@ -39,14 +46,14 @@
           '<img src="' + imgSrc + '" alt="' + escHtml(product.name) + '" loading="lazy" width="300" height="400">' +
         '</a>' +
         '<div class="product-card__body">' +
-          '<span class="product-card__badge">' + escHtml(BADGE) + '</span>' +
           '<h2 class="product-card__name">' +
             '<a href="' + productUrl + '">' + escHtml(product.name) + '</a>' +
           '</h2>' +
-          countryHtml +
-        '</div>' +
-        '<div class="product-card__footer">' +
-          '<a href="' + enquiryUrl + '" class="btn btn-outline btn-full">Enquire Now</a>' +
+          gradeTypeHtml +
+          alcoholHtml +
+          packSizeHtml +
+          tastingNoteHtml +
+          '<a href="' + productUrl + '" class="btn btn-primary btn-full product-card__cta">Find Out More</a>' +
         '</div>' +
       '</article>'
     );

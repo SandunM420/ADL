@@ -107,7 +107,7 @@ if ($id <= 0) {
 try {
     $pdo  = get_db_connection();
     $stmt = $pdo->prepare(
-        'SELECT id, name, category, subcategory, country, description, image, visible
+        'SELECT id, name, item_code, grape_type, alcohol, pack_size, category, subcategory, country, description, image, visible
            FROM products
           WHERE id = ?'
     );
@@ -128,6 +128,10 @@ if (!$product) {
 $errors      = [];
 $form_values = [
     'name'        => $product['name'],
+    'item_code'   => $product['item_code'] ?? '',
+    'grape_type'  => $product['grape_type'] ?? '',
+    'alcohol'     => $product['alcohol'] ?? '',
+    'pack_size'   => $product['pack_size'] ?? '',
     'category'    => $product['category'],
     'subcategory' => $product['subcategory'] ?? '',
     'country'     => $product['country'] ?? '',
@@ -150,6 +154,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Read inputs
         $form_values['name']        = trim($_POST['name']        ?? '');
+        $form_values['item_code']   = trim($_POST['item_code']   ?? '');
+        $form_values['grape_type']  = trim($_POST['grape_type']  ?? '');
+        $form_values['alcohol']     = trim($_POST['alcohol']     ?? '');
+        $form_values['pack_size']   = trim($_POST['pack_size']   ?? '');
         $form_values['category']    = trim($_POST['category']    ?? '');
         $form_values['subcategory'] = trim($_POST['subcategory'] ?? '');
         $form_values['country']     = trim($_POST['country']     ?? '');
@@ -177,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($form_values['description'] === '') {
-            $errors[] = 'Product description is required.';
+            $errors[] = 'Tasting note is required.';
         }
 
         // Handle optional image replacement
@@ -198,12 +206,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo  = get_db_connection();
                 $stmt = $pdo->prepare(
                     'UPDATE products
-                        SET name = ?, category = ?, subcategory = ?, country = ?,
+                        SET name = ?, item_code = ?, grape_type = ?, alcohol = ?, pack_size = ?, category = ?, subcategory = ?, country = ?,
                             description = ?, image = ?, visible = ?
                       WHERE id = ?'
                 );
                 $stmt->execute([
                     $form_values['name'],
+                    $form_values['item_code'] !== '' ? $form_values['item_code'] : null,
+                    $form_values['grape_type'] !== '' ? $form_values['grape_type'] : null,
+                    $form_values['alcohol'] !== '' ? $form_values['alcohol'] : null,
+                    $form_values['pack_size'] !== '' ? $form_values['pack_size'] : null,
                     $form_values['category'],
                     $form_values['subcategory'],
                     $form_values['country'] !== '' ? $form_values['country'] : null,
@@ -333,6 +345,66 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
           >
         </div>
 
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="grape_type">Grape Type</label>
+            <input
+              type="text"
+              id="grape_type"
+              name="grape_type"
+              class="form-control"
+              value="<?php echo htmlspecialchars($form_values['grape_type'], ENT_QUOTES, 'UTF-8'); ?>"
+              placeholder="e.g. Chardonnay, Premium"
+              maxlength="150"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="country">Origin</label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              class="form-control"
+              value="<?php echo htmlspecialchars($form_values['country'], ENT_QUOTES, 'UTF-8'); ?>"
+              placeholder="e.g. Chile, Scotland, France"
+              maxlength="100"
+              autocomplete="off"
+            >
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="alcohol">Alcohol</label>
+            <input
+              type="text"
+              id="alcohol"
+              name="alcohol"
+              class="form-control"
+              value="<?php echo htmlspecialchars($form_values['alcohol'], ENT_QUOTES, 'UTF-8'); ?>"
+              placeholder="e.g. 13.5%"
+              maxlength="100"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pack_size">Pack Size</label>
+            <input
+              type="text"
+              id="pack_size"
+              name="pack_size"
+              class="form-control"
+              value="<?php echo htmlspecialchars($form_values['pack_size'], ENT_QUOTES, 'UTF-8'); ?>"
+              placeholder="e.g. 750ml bottle, 12 bottles per case"
+              maxlength="100"
+              autocomplete="off"
+            >
+          </div>
+        </div>
+
         <!-- Category & Subcategory -->
         <div class="form-row">
           <div class="form-group">
@@ -370,33 +442,17 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
           </div>
         </div>
 
-        <!-- Country of Origin -->
-        <div class="form-group">
-          <label class="form-label" for="country">Country of Origin</label>
-          <input
-            type="text"
-            id="country"
-            name="country"
-            class="form-control"
-            value="<?php echo htmlspecialchars($form_values['country'], ENT_QUOTES, 'UTF-8'); ?>"
-            placeholder="e.g. Chile, Scotland, France  (optional)"
-            maxlength="100"
-            autocomplete="off"
-          >
-          <p class="form-hint">Displayed on the product detail page only — not used for filtering.</p>
-        </div>
-
-        <!-- Description -->
+        <!-- Tasting Note -->
         <div class="form-group">
           <label class="form-label" for="description">
-            Description <span class="required" aria-label="required">*</span>
+            Tasting Note <span class="required" aria-label="required">*</span>
           </label>
           <textarea
             id="description"
             name="description"
             class="form-control"
             rows="5"
-            placeholder="Enter a detailed product description…"
+            placeholder="Enter tasting notes..."
             required
           ><?php echo htmlspecialchars($form_values['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
         </div>

@@ -171,10 +171,15 @@
         var enquiryUrl = '/contact.html?product=' + encodeURIComponent(product.name);
 
         var metaRows = '';
-        if (product.country) {
-          metaRows += '<div class="product-detail__meta-row"><span class="product-detail__meta-label">Country</span><span class="product-detail__meta-value">' + escHtml(product.country) + '</span></div>';
+        if (product.grape_type) {
+          metaRows += '<div class="product-detail__meta-row"><span class="product-detail__meta-label">Grape Type</span><span class="product-detail__meta-value">' + escHtml(product.grape_type) + '</span></div>';
         }
-        metaRows += '<div class="product-detail__meta-row"><span class="product-detail__meta-label">Category</span><span class="product-detail__meta-value">' + escHtml(meta.catLabel) + (meta.subLabel ? ' — ' + escHtml(meta.subLabel) : '') + '</span></div>';
+        if (product.alcohol) {
+          metaRows += '<div class="product-detail__meta-row"><span class="product-detail__meta-label">Alcohol</span><span class="product-detail__meta-value">' + escHtml(product.alcohol) + '</span></div>';
+        }
+        if (product.pack_size) {
+          metaRows += '<div class="product-detail__meta-row"><span class="product-detail__meta-label">Pack Size</span><span class="product-detail__meta-value">' + escHtml(product.pack_size) + '</span></div>';
+        }
 
         document.getElementById('product-area').innerHTML =
           '<div class="product-detail__grid">' +
