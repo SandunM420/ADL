@@ -841,7 +841,7 @@ p {
 /* ─── Hero ───────────────────────────────────────────────────────────────── */
 
 .hero {
-  padding: var(--space-15) 0;
+  padding: var(--space-10) 0;
   background-color: #120d07;
   border-bottom: 1px solid rgba(201, 168, 76, 0.15);
   position: relative;
@@ -912,7 +912,7 @@ p {
 }
 
 .hero__title {
-  font-size: clamp(2.75rem, 6vw, 5rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 600;
   color: #FFFFFF;
   line-height: 1.05;
@@ -1193,8 +1193,13 @@ p {
 .trust-bar {
   background-color: var(--color-text-primary);
   position: relative;
-  aspect-ratio: 1983 / 793;
+  aspect-ratio: 16 / 7;
+  border-radius: var(--radius-xl);
   overflow: hidden;
+}
+
+.trust-bar-section {
+  padding: 0 0 var(--space-15);
 }
 
 .trust-bar__bg {

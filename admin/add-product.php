@@ -223,7 +223,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
   <!-- Top Bar -->
   <header class="admin-topbar">
     <span class="admin-topbar__logo">
-      <img src="/assets/images/logo.png" alt="Abeywardana Distributors">
+      <img src="/assets/images/logo-admin.png" alt="Abeywardana Distributors">
     </span>
     <span class="admin-topbar__badge">Admin Portal</span>
     <div class="admin-topbar__spacer"></div>

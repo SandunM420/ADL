@@ -10,6 +10,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <style>
+    .about-hero {
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      background-color: #120d07;
+      background-image: linear-gradient(to right, rgba(10, 7, 3, 0.85) 0%, rgba(10, 7, 3, 0.60) 55%, rgba(10, 7, 3, 0.30) 100%), url('/assets/images/about us banner 1.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .about-hero .container {
+      position: relative;
+      z-index: 1;
+    }
+    .about-hero .page-header__subtitle {
+      color: rgba(255, 255, 255, 0.78);
+      max-width: 560px;
+    }
+    .about-hero .page-header__title {
+      color: #FFFFFF;
+    }
+    .about-hero .breadcrumb {
+      color: rgba(255, 255, 255, 0.66);
+    }
+    .about-hero .breadcrumb a {
+      color: rgba(255, 255, 255, 0.66);
+    }
+    .about-hero .breadcrumb a:hover {
+      color: var(--color-gold);
+    }
     .about-section { padding: var(--space-15) 0; }
     .about-grid {
       display: grid;
@@ -40,7 +70,7 @@
     }
     .about-stat__label { font-size: var(--font-size-sm); color: var(--color-text-muted); }
     .about-body { display: flex; flex-direction: column; gap: var(--space-4); }
-    .about-body h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 600; letter-spacing: 0.06em; }
+    .about-body h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 600; color: var(--color-gold-dark); letter-spacing: 0.06em; }
     .about-body p { font-size: var(--font-size-base); line-height: 1.8; }
     .values-grid {
       display: grid;
@@ -57,6 +87,16 @@
     .value-card__icon { font-size: 1.75rem; margin-bottom: var(--space-2); }
     .value-card__title { font-size: var(--font-size-base); font-weight: 700; margin-bottom: 6px; }
     .value-card__text { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.6; }
+    .about-banner {
+      padding: 0 0 var(--space-15);
+    }
+    .about-banner img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      object-fit: cover;
+      border-radius: var(--radius-xl);
+    }
   </style>
 </head>
 <body>
@@ -65,7 +105,7 @@
 
   <main id="main-content">
 
-    <header class="page-header">
+    <header class="page-header about-hero">
       <div class="container">
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <a href="/">Home</a>
@@ -140,6 +180,13 @@
       </div>
     </section>
 
+    <!-- About Banner -->
+    <section class="about-banner" aria-label="Abeywardana Distributors showcase">
+      <div class="container">
+        <img src="/assets/images/about us banner 2.png?v=20260617" alt="Premium beverage showcase by Abeywardana Distributors" loading="lazy">
+      </div>
+    </section>
+
     <!-- Values -->
     <section class="section" style="background: var(--color-surface-2); border-top: 1px solid var(--color-border);">
       <div class="container">
@@ -178,7 +225,7 @@
     <div class="container">
       <div class="footer__grid">
         <div>
-          <div class="footer__logo"><img src="/assets/images/logo.png" alt="Abeywardana Distributors"></div>
+          <div class="footer__logo"><img src="/assets/images/logo-admin.png" alt="Abeywardana Distributors"></div>
           <p class="footer__desc">Premium alcoholic and non-alcoholic beverage importer and distributor, serving Sri Lanka island-wide.</p>
         </div>
         <div>
