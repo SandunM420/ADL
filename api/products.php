@@ -91,9 +91,9 @@ try {
     echo json_encode($products, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 } catch (PDOException $e) {
-    error_log('products.php — PDO error: ' . $e->getMessage());
+    error_log('products.php â€” PDO error: ' . $e->getMessage());
     send_error('Database error. Please try again later.', 500);
 } catch (Exception $e) {
-    error_log('products.php — unexpected error: ' . $e->getMessage());
+    error_log('products.php â€” unexpected error: ' . $e->getMessage());
     send_error('An unexpected error occurred.', 500);
 }

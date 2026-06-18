@@ -2,7 +2,7 @@
 /**
  * Admin: Edit Product
  *
- * Protected page — redirects to login if no valid admin session.
+ * Protected page â€” redirects to login if no valid admin session.
  * Loads an existing product by id, renders a pre-filled form, and
  * updates the record on submission. The image is only replaced if a
  * new file is uploaded; otherwise the existing image is kept.
@@ -39,7 +39,7 @@ function get_db_connection() {
 
 /**
  * Validate, move, and return the relative path of an uploaded product image.
- * Checks MIME type via finfo (not file extension) and enforces a 5 MB limit.
+ * Checks MIME type via finfo (not file extension).
  *
  * @param  array  $file  Single entry from $_FILES (e.g. $_FILES['image'])
  * @return string        Relative path suitable for storing in the database
@@ -47,14 +47,9 @@ function get_db_connection() {
  */
 function upload_product_image($file) {
     $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp'];
-    $max_bytes          = 5 * 1024 * 1024; // 5 MB
 
     if ($file['error'] !== UPLOAD_ERR_OK) {
         throw new RuntimeException('Upload failed with error code ' . $file['error'] . '.');
-    }
-
-    if ($file['size'] > $max_bytes) {
-        throw new RuntimeException('Image must be 5 MB or smaller.');
     }
 
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -86,7 +81,7 @@ function upload_product_image($file) {
     return 'assets/images/products/' . $filename;
 }
 
-/* ─── Valid options (used for server-side validation) ──────────────────── */
+/* â”€â”€â”€ Valid options (used for server-side validation) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 $valid_categories    = ['wines', 'champagne', 'sparkling-wine', 'spirits'];
 $valid_subcategories = [
@@ -95,7 +90,7 @@ $valid_subcategories = [
     'whiskey', 'rum', 'gin', 'vodka', 'brandy', 'liquor',
 ];
 
-/* ─── Load the product ───────────────────────────────────────────────── */
+/* â”€â”€â”€ Load the product â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
@@ -114,7 +109,7 @@ try {
     $stmt->execute([$id]);
     $product = $stmt->fetch();
 } catch (PDOException $e) {
-    error_log('edit-product.php — PDO error: ' . $e->getMessage());
+    error_log('edit-product.php â€” PDO error: ' . $e->getMessage());
     $product = false;
 }
 
@@ -123,7 +118,7 @@ if (!$product) {
     exit;
 }
 
-/* ─── State ──────────────────────────────────────────────────────────────── */
+/* â”€â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 $errors      = [];
 $form_values = [
@@ -140,7 +135,7 @@ $form_values = [
 ];
 $current_image = $product['image'];
 
-/* ─── Handle POST ────────────────────────────────────────────────────────── */
+/* â”€â”€â”€ Handle POST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -238,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
 
             } catch (PDOException $e) {
-                error_log('edit-product.php — PDO error: ' . $e->getMessage());
+                error_log('edit-product.php â€” PDO error: ' . $e->getMessage());
                 $errors[] = 'A database error occurred. Please try again.';
             }
         }
@@ -258,7 +253,8 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Product — Admin | Abeywardana Distributors</title>
+  <title>Edit Product â€” Admin | Abeywardana Distributors</title>
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -303,6 +299,12 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
             <path d="M21 15l-5-5L5 19"/>
           </svg>
           Site Images
+        </a>
+        <a href="/admin/best-sellers.php" class="admin-sidebar__link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          Best Sellers
         </a>
       </nav>
     </aside>
@@ -420,7 +422,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
               Category <span class="required" aria-label="required">*</span>
             </label>
             <select id="category" name="category" class="form-control" required>
-              <option value="">— Select category —</option>
+              <option value="">â€” Select category â€”</option>
               <option value="wines"
                 <?php echo $form_values['category'] === 'wines' ? 'selected' : ''; ?>>
                 Wines
@@ -445,7 +447,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
               Subcategory <span class="required" aria-label="required" id="subcategory-req">*</span>
             </label>
             <select id="subcategory" name="subcategory" class="form-control">
-              <option value="">— Select category first —</option>
+              <option value="">â€” Select category first â€”</option>
             </select>
           </div>
         </div>
@@ -479,7 +481,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
                 <polyline points="21 15 16 10 5 21"/>
               </svg>
               <span class="image-upload__text">Click to replace image</span>
-              <span class="image-upload__hint">JPEG, PNG, or WebP — max 5 MB. Leave empty to keep the current image.</span>
+              <span class="image-upload__hint">JPEG, PNG, or WebP. Leave empty to keep the current image.</span>
             </label>
             <input
               type="file"
@@ -528,7 +530,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 (function () {
   'use strict';
 
-  /* ── Cascading subcategory dropdown ────────────────────────────────────── */
+  /* â”€â”€ Cascading subcategory dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   var SUBCATEGORY_MAP = {
     wines: [
@@ -574,7 +576,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 
     var placeholder = document.createElement('option');
     placeholder.value       = '';
-    placeholder.textContent = '— Select subcategory —';
+    placeholder.textContent = 'â€” Select subcategory â€”';
     subcategoryEl.appendChild(placeholder);
 
     for (var i = 0; i < options.length; i++) {
@@ -597,7 +599,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
     updateSubcategoryOptions(this.value);
   });
 
-  /* ── New image preview ──────────────────────────────────────────────────── */
+  /* â”€â”€ New image preview â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   var imageInput   = document.getElementById('image');
   var imagePreview = document.getElementById('image-preview');
@@ -617,7 +619,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
     reader.readAsDataURL(file);
   });
 
-  /* ── Visibility toggle label ────────────────────────────────────────────── */
+  /* â”€â”€ Visibility toggle label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   var visibleInput = document.getElementById('visible');
   var visibleLabel = document.getElementById('visible-label');

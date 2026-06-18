@@ -137,19 +137,7 @@ p {
 }
 
 .section {
-  padding: var(--space-5) 0;
-}
-
-@media (min-width: 768px) {
-  .section {
-    padding: var(--space-8) 0;
-  }
-}
-
-@media (min-width: 1024px) {
-  .section {
-    padding: var(--space-15) 0;
-  }
+  padding: clamp(var(--space-6), 6vw, var(--space-10)) 0;
 }
 
 /* ─── Scroll Reveal ──────────────────────────────────────────────────────── */
@@ -1104,7 +1092,7 @@ button.nav-link {
 }
 
 .gallery-section {
-  padding: var(--space-8) 0;
+  padding: clamp(var(--space-6), 6vw, var(--space-10)) 0;
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
 }
@@ -1361,7 +1349,7 @@ button.nav-link {
 }
 
 .trust-bar-section {
-  padding: 0 0 var(--space-15);
+  padding: 0 0 clamp(var(--space-6), 6vw, var(--space-10));
 }
 
 .trust-bar__bg {
@@ -1391,7 +1379,7 @@ button.nav-link {
 .cta-section {
   background-color: var(--color-surface-2);
   border-top: 1px solid var(--color-border);
-  padding: var(--space-15) 0;
+  padding: clamp(var(--space-6), 6vw, var(--space-10)) 0;
   text-align: center;
 }
 

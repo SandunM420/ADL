@@ -1,16 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="page-title">Product — Abeywardana Distributors</title>
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <meta name="description" id="page-desc" content="Product details — Abeywardana Distributors">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <style>
-    .product-detail { padding: var(--space-8) 0 var(--space-15); }
+    .product-detail { padding: var(--space-8) 0 var(--space-10); }
     .product-detail__grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -21,13 +22,14 @@
       .product-detail__grid { grid-template-columns: 5fr 7fr; gap: var(--space-8); }
     }
     .product-detail__image-wrap {
-      aspect-ratio: 3 / 4;
+      height: min(62vh, 620px);
+      min-height: 360px;
       background: var(--color-surface-2);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
       overflow: hidden;
     }
-    .product-detail__image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .product-detail__image-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .product-detail__info { display: flex; flex-direction: column; gap: var(--space-3); }
     .product-detail__name {
       font-size: clamp(1.5rem, 4vw, 2.25rem);
@@ -66,13 +68,6 @@
   <div id="navbar-placeholder"></div>
 
   <main id="main-content">
-
-    <!-- breadcrumb rendered by JS -->
-    <div id="breadcrumb-area" class="page-header" style="padding-bottom: var(--space-4);">
-      <div class="container">
-        <div class="spinner" role="status" aria-label="Loading"><div class="spinner__ring" style="width:32px;height:32px;border-width:2px;"></div></div>
-      </div>
-    </div>
 
     <div class="product-detail">
       <div class="container">
@@ -143,23 +138,6 @@
           .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
       }
 
-      function renderBreadcrumb(product) {
-        var key  = product.category + ':' + (product.subcategory || '');
-        var meta = CATEGORY_META[key] || { catLabel: product.category, subLabel: product.subcategory, backUrl: '/' };
-
-        var crumbs = '<a href="/">Home</a><span class="breadcrumb__sep" aria-hidden="true">/</span>';
-        crumbs += '<span>' + escHtml(meta.catLabel) + '</span>';
-        if (meta.subLabel) {
-          crumbs += '<span class="breadcrumb__sep" aria-hidden="true">/</span>';
-          crumbs += '<a href="' + meta.backUrl + '">' + escHtml(meta.subLabel) + '</a>';
-        }
-        crumbs += '<span class="breadcrumb__sep" aria-hidden="true">/</span>';
-        crumbs += '<span aria-current="page">' + escHtml(product.name) + '</span>';
-
-        document.getElementById('breadcrumb-area').innerHTML =
-          '<div class="container"><nav class="breadcrumb" aria-label="Breadcrumb">' + crumbs + '</nav></div>';
-      }
-
       function renderProduct(product) {
         var imgSrc = product.image
           ? '/' + escHtml(product.image)
@@ -205,7 +183,6 @@
       }
 
       function renderError() {
-        document.getElementById('breadcrumb-area').innerHTML = '';
         document.getElementById('product-area').innerHTML =
           '<div class="empty-state">' +
             '<p class="empty-state__title">Product not found</p>' +
@@ -225,7 +202,6 @@
             if (data.error) throw new Error(data.error);
             document.title = data.name + ' — Abeywardana Distributors';
             document.getElementById('page-desc').content = data.description ? data.description.substring(0, 155) : '';
-            renderBreadcrumb(data);
             renderProduct(data);
           })
           .catch(renderError);

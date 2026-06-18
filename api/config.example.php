@@ -1,6 +1,6 @@
 <?php
 /**
- * Database Configuration — Template
+ * Database Configuration â€” Template
  *
  * Copy this file to config.php and fill in real credentials for the
  * current environment (local XAMPP, staging, production). config.php
@@ -21,7 +21,7 @@ define('DB_CHARSET', 'utf8mb4');
 /**
  * Admin portal credentials.
  *
- * Single fixed admin account — no admins table needed. The password is
+ * Single fixed admin account â€” no admins table needed. The password is
  * stored as a password_hash() hash and checked with password_verify()
  * in admin/index.php, never compared as plain text.
  *

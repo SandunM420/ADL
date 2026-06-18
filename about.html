@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us — Abeywardana Distributors</title>
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <meta name="description" content="Learn about Abeywardana Distributors — Sri Lanka's trusted importer and distributor of premium wines, champagnes, and spirits.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +42,7 @@
     .about-hero .breadcrumb a:hover {
       color: var(--color-gold);
     }
-    .about-section { padding: var(--space-15) 0; }
+    .about-section { padding: clamp(var(--space-6), 6vw, var(--space-10)) 0; }
     .about-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -136,7 +137,7 @@
     .value-card__title { font-size: var(--font-size-lg); font-weight: 700; margin-bottom: var(--space-1); }
     .value-card__text { font-size: var(--font-size-base); color: var(--color-text-secondary); line-height: 1.7; }
     .about-banner {
-      padding: 0 0 var(--space-15);
+      padding: 0 0 clamp(var(--space-6), 6vw, var(--space-10));
     }
     .about-banner img {
       display: block;

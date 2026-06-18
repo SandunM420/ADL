@@ -202,7 +202,7 @@ function allowed_mime_for_path($relative_path) {
 
 function slot_px_note($image_key) {
     if (in_array($image_key, ['home_hero_1', 'home_hero_2', 'home_hero_3', 'about_hero', 'contact_hero'], true)) {
-        return 'Reference: 1366 x 420 px / 1920 x 420 px';
+        return 'Recommended: 1920 x 420 px';
     }
 
     if (in_array($image_key, ['about_showcase', 'home_trust_1', 'home_trust_2'], true)) {
@@ -283,7 +283,9 @@ function replace_site_image($file, $target_relative_path) {
 
 $errors = [];
 $flash_success = $_SESSION['flash_success'] ?? '';
-unset($_SESSION['flash_success']);
+$flash_error = '';
+$restore_scroll_y = $_SESSION['site_image_scroll_y'] ?? null;
+unset($_SESSION['flash_success'], $_SESSION['site_image_scroll_y']);
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -292,6 +294,7 @@ $csrf_token = $_SESSION['csrf_token'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image_key = $_POST['image_key'] ?? '';
+    $posted_scroll_y = isset($_POST['scroll_y']) ? max(0, (int) $_POST['scroll_y']) : 0;
 
     if (
         empty($_POST['csrf_token']) ||
@@ -306,11 +309,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             replace_site_image($_FILES['site_image'], $managed_images[$image_key]['path']);
             $_SESSION['flash_success'] = $managed_images[$image_key]['label'] . ' was updated successfully.';
+            $_SESSION['site_image_scroll_y'] = $posted_scroll_y;
             header('Location: /admin/site-images.php');
             exit;
         } catch (RuntimeException $e) {
             $errors[] = $e->getMessage();
         }
+    }
+
+    if (!empty($errors)) {
+        $flash_error = $errors[0];
+        $restore_scroll_y = $posted_scroll_y;
     }
 }
 
@@ -322,6 +331,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Site Images - Admin | Abeywardana Distributors</title>
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -367,6 +377,12 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
           </svg>
           Site Images
         </a>
+        <a href="/admin/best-sellers.php" class="admin-sidebar__link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          Best Sellers
+        </a>
       </nav>
     </aside>
 
@@ -376,12 +392,16 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
       <p class="admin-page-subtitle">Compare the website slot size with your uploaded image size, then replace fixed website images without changing filenames.</p>
 
       <?php if ($flash_success !== ''): ?>
-        <div class="alert alert-success" role="status"><?php echo htmlspecialchars($flash_success, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="admin-toast admin-toast--success" role="status" aria-live="polite">
+          <span class="admin-toast__icon" aria-hidden="true">&#10003;</span>
+          <span><?php echo htmlspecialchars($flash_success, ENT_QUOTES, 'UTF-8'); ?></span>
+        </div>
       <?php endif; ?>
 
-      <?php if (!empty($errors)): ?>
-        <div class="alert alert-error" role="alert">
-          <?php echo htmlspecialchars($errors[0], ENT_QUOTES, 'UTF-8'); ?>
+      <?php if ($flash_error !== ''): ?>
+        <div class="admin-toast admin-toast--error" role="alert" aria-live="assertive">
+          <span class="admin-toast__icon" aria-hidden="true">&#10005;</span>
+          <span><?php echo htmlspecialchars($flash_error, ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
       <?php endif; ?>
 
@@ -412,7 +432,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
                     : 'Unknown';
                 $weight = $meta['size'] !== null ? format_bytes($meta['size']) : 'Unknown';
               ?>
-              <tr>
+              <tr id="site-image-<?php echo htmlspecialchars($key, ENT_QUOTES, 'UTF-8'); ?>">
                 <td>
                   <div class="site-image-thumb">
                     <?php if ($meta['exists']): ?>
@@ -445,6 +465,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
                   <form class="site-image-upload" method="POST" action="/admin/site-images.php" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="image_key" value="<?php echo htmlspecialchars($key, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="scroll_y" value="0">
                     <label class="btn btn-outline btn-sm site-image-upload__button">
                       Choose
                       <input type="file" name="site_image" accept="<?php echo htmlspecialchars($accept, ENT_QUOTES, 'UTF-8'); ?>" required>
@@ -461,6 +482,29 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
     </main>
   </div>
 </div>
+
+<script>
+(function () {
+  'use strict';
+
+  var restoreScrollY = <?php echo $restore_scroll_y !== null ? (int) $restore_scroll_y : 'null'; ?>;
+
+  if (restoreScrollY !== null) {
+    window.requestAnimationFrame(function () {
+      window.scrollTo(0, restoreScrollY);
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.site-image-upload'), function (form) {
+    form.addEventListener('submit', function () {
+      var scrollInput = form.querySelector('input[name="scroll_y"]');
+      if (scrollInput) {
+        scrollInput.value = String(window.scrollY || window.pageYOffset || 0);
+      }
+    });
+  });
+}());
+</script>
 
 </body>
 </html>

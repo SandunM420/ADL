@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Abeywardana Distributors — Premium Wines &amp; Spirits, Sri Lanka</title>
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <meta name="description" content="Sri Lanka's trusted importer and distributor of premium wines, champagnes, and spirits. Serving hotels, restaurants, and discerning consumers island-wide.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +17,7 @@
 
   <main id="main-content">
 
-    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <!-- -- Hero ----------------------------------------------------------- -->
     <section class="hero" aria-label="Introduction">
       <div class="hero__bg hero__bg--1 is-active"></div>
       <div class="hero__bg hero__bg--2"></div>
@@ -36,7 +37,7 @@
       </div>
     </section>
 
-    <!-- ── Gallery Strip ────────────────────────────────────────────────────── -->
+    <!-- -- Gallery Strip ------------------------------------------------------ -->
     <section class="gallery-section" aria-label="Visual showcase">
       <div class="container">
 
@@ -77,7 +78,7 @@
       </div>
     </section>
 
-    <!-- ── Category Overview ─────────────────────────────────────────────── -->
+    <!-- -- Category Overview ----------------------------------------------- -->
     <section class="section" id="categories" aria-labelledby="categories-heading">
       <div class="container">
 
@@ -165,7 +166,7 @@
       </div>
     </section>
 
-    <!-- ── Best Sellers ─────────────────────────────────────────────────────── -->
+    <!-- -- Best Sellers ------------------------------------------------------- -->
     <section class="section" id="best-sellers" aria-labelledby="bestsellers-heading">
       <div class="container">
 
@@ -177,66 +178,16 @@
           </p>
         </div>
 
-        <div class="product-grid home-product-grid">
-
-          <!-- 1 -->
-          <div class="product-card home-product-card">
-            <div class="product-card__image">
-              <img src="/assets/images/293A3091.jpg" alt="Vale de Lobos Reserva Syrah">
-            </div>
-            <div class="product-card__body">
-              <p class="product-card__name">Vale de Lobos Reserva Syrah</p>
-            </div>
-            <div class="product-card__footer">
-              <a href="/contact.html?product=Vale+de+Lobos+Reserva+Syrah" class="btn btn-outline">Enquire</a>
-            </div>
+        <div class="product-grid home-product-grid" id="best-sellers-area" aria-live="polite">
+          <div class="spinner" role="status" aria-label="Loading best sellers">
+            <div class="spinner__ring"></div>
           </div>
-
-          <!-- 2 -->
-          <div class="product-card home-product-card">
-            <div class="product-card__image">
-              <img src="/assets/images/293A3077.jpg" alt="Royal B Pinotage 2023">
-            </div>
-            <div class="product-card__body">
-              <p class="product-card__name">Royal B Pinotage 2023</p>
-            </div>
-            <div class="product-card__footer">
-              <a href="/contact.html?product=Royal+B+Pinotage+2023" class="btn btn-outline">Enquire</a>
-            </div>
-          </div>
-
-          <!-- 3 -->
-          <div class="product-card home-product-card">
-            <div class="product-card__image">
-              <img src="/assets/images/_93A5103.jpg" alt="Robertson Winery Pinotage 2025">
-            </div>
-            <div class="product-card__body">
-              <p class="product-card__name">Robertson Winery Pinotage 2025</p>
-            </div>
-            <div class="product-card__footer">
-              <a href="/contact.html?product=Robertson+Winery+Pinotage+2025" class="btn btn-outline">Enquire</a>
-            </div>
-          </div>
-
-          <!-- 4 -->
-          <div class="product-card home-product-card">
-            <div class="product-card__image">
-              <img src="/assets/images/_93A5082.jpg" alt="Robertson Winery Chenin Blanc 2025">
-            </div>
-            <div class="product-card__body">
-              <p class="product-card__name">Robertson Winery Chenin Blanc 2025</p>
-            </div>
-            <div class="product-card__footer">
-              <a href="/contact.html?product=Robertson+Winery+Chenin+Blanc+2025" class="btn btn-outline">Enquire</a>
-            </div>
-          </div>
-
         </div>
 
       </div>
     </section>
 
-    <!-- ── Trust Bar ──────────────────────────────────────────────────────── -->
+    <!-- -- Trust Bar -------------------------------------------------------- -->
     <section class="trust-bar-section" aria-label="Key facts">
       <div class="container">
         <div class="trust-bar">
@@ -246,7 +197,7 @@
       </div>
     </section>
 
-    <!-- ── CTA ────────────────────────────────────────────────────────────── -->
+    <!-- -- CTA -------------------------------------------------------------- -->
     <section class="cta-section" aria-labelledby="cta-heading">
       <div class="container">
         <h2 class="cta-section__title reveal-on-scroll" id="cta-heading">Ready to Place an Enquiry?</h2>
@@ -262,7 +213,7 @@
 
   </main>
 
-  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <!-- -- Footer ----------------------------------------------------------- -->
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer__grid">
@@ -299,6 +250,7 @@
 
   <script src="assets/js/navbar.js"></script>
   <script src="assets/js/hero-banner.js"></script>
+  <script src="assets/js/best-sellers.js"></script>
   <script src="assets/js/trust-bar-rotator.js"></script>
   <script src="assets/js/scroll-reveal.js"></script>
 

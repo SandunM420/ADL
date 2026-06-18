@@ -179,6 +179,56 @@
   padding-left: 18px;
 }
 
+.admin-toast {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 14px var(--space-3);
+  border: 1px solid;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.admin-toast__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #FFFFFF;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-toast--success {
+  border-color: #A3D9B1;
+  color: #1A6B35;
+}
+
+.admin-toast--success .admin-toast__icon {
+  background: #1A9A4A;
+}
+
+.admin-toast--error {
+  border-color: #F5B8B4;
+  color: #9B1C1C;
+}
+
+.admin-toast--error .admin-toast__icon {
+  background: #C0392B;
+}
+
 /* ─── Admin Form ─────────────────────────────────────────────────────────── */
 
 .admin-form {
@@ -608,6 +658,18 @@ select.form-control {
 
 .site-image-upload__button input {
   display: none;
+}
+
+.best-seller-table {
+  min-width: 780px;
+}
+
+.best-seller-table .form-control {
+  min-width: 220px;
+}
+
+.best-seller-form {
+  margin: 0;
 }
 
 .admin-table__thumb {

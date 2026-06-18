@@ -2,7 +2,7 @@
 /**
  * Admin: Dashboard
  *
- * Protected page — redirects to login if no valid admin session.
+ * Protected page â€” redirects to login if no valid admin session.
  * Lists every product in the database (visible and hidden) with its
  * image, category, country, and visibility status.
  */
@@ -48,7 +48,7 @@ try {
     );
     $products = $stmt->fetchAll();
 } catch (PDOException $e) {
-    error_log('dashboard.php — PDO error: ' . $e->getMessage());
+    error_log('dashboard.php â€” PDO error: ' . $e->getMessage());
     $db_error = 'Could not load products. Please check the database connection.';
 }
 
@@ -73,7 +73,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
  */
 function format_slug_label($slug) {
     if ($slug === null || $slug === '') {
-        return '—';
+        return 'â€”';
     }
     return str_replace('-', ' ', ucwords($slug, '-'));
 }
@@ -107,7 +107,8 @@ $filter_countries     = distinct_filter_values($products, 'country');
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — Admin | Abeywardana Distributors</title>
+  <title>Dashboard â€” Admin | Abeywardana Distributors</title>
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -152,6 +153,12 @@ $filter_countries     = distinct_filter_values($products, 'country');
             <path d="M21 15l-5-5L5 19"/>
           </svg>
           Site Images
+        </a>
+        <a href="/admin/best-sellers.php" class="admin-sidebar__link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          Best Sellers
         </a>
       </nav>
     </aside>
@@ -259,7 +266,7 @@ $filter_countries     = distinct_filter_values($products, 'country');
                   <td><?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                   <td><?php echo htmlspecialchars(format_slug_label($product['category']), ENT_QUOTES, 'UTF-8'); ?></td>
                   <td><?php echo htmlspecialchars(format_slug_label($product['subcategory']), ENT_QUOTES, 'UTF-8'); ?></td>
-                  <td><?php echo htmlspecialchars($product['country'] ?: '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                  <td><?php echo htmlspecialchars($product['country'] ?: 'â€”', ENT_QUOTES, 'UTF-8'); ?></td>
                   <td>
                     <?php if ((int) $product['visible'] === 1): ?>
                       <span class="status-badge status-badge--visible">Visible</span>
