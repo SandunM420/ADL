@@ -16,7 +16,7 @@
       display: flex;
       align-items: center;
       background-color: #120d07;
-      background-image: linear-gradient(to right, rgba(10, 7, 3, 0.85) 0%, rgba(10, 7, 3, 0.60) 55%, rgba(10, 7, 3, 0.30) 100%), url('/assets/images/about us banner 1.png');
+      background-image: linear-gradient(to right, rgba(10, 7, 3, 0.85) 0%, rgba(10, 7, 3, 0.60) 55%, rgba(10, 7, 3, 0.30) 100%), url('/assets/images/About us hero final 1.png');
       background-size: 100% 100%, auto 122%;
       background-position: center, right center;
       background-repeat: no-repeat;
@@ -52,24 +52,57 @@
       .about-grid { grid-template-columns: 1fr 1fr; }
     }
     .about-decorative {
-      background: var(--color-surface-2);
+      background: linear-gradient(145deg, #FFFFFF 0%, var(--color-surface-2) 100%);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
-      padding: var(--space-8) var(--space-6);
+      padding: var(--space-5);
       display: flex;
       flex-direction: column;
-      gap: var(--space-4);
+      gap: var(--space-2);
+      box-shadow: var(--shadow-sm);
     }
-    .about-stat { border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-3); }
-    .about-stat:last-child { border-bottom: none; padding-bottom: 0; }
-    .about-stat__value {
-      font-size: var(--font-size-3xl);
-      font-weight: 700;
+    .about-stat {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-3);
+      align-items: center;
+      padding: var(--space-3);
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      transition: background-color var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+    }
+    .about-stat:hover {
+      background-color: rgba(255, 255, 255, 0.74);
+      border-color: var(--color-border);
+      transform: translateY(-2px);
+    }
+    .about-stat__icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
       color: var(--color-gold-dark);
-      line-height: 1;
+      background: rgba(201, 168, 76, 0.12);
+      border: 1px solid rgba(201, 168, 76, 0.26);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .about-stat__icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+    }
+    .about-stat__value {
+      font-family: var(--font-family-display);
+      font-size: clamp(1.55rem, 3vw, var(--font-size-3xl));
+      font-weight: 600;
+      color: var(--color-gold-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
       margin-bottom: 4px;
     }
-    .about-stat__label { font-size: var(--font-size-sm); color: var(--color-text-muted); }
+    .about-stat__label { font-size: var(--font-size-sm); color: var(--color-text-muted); line-height: 1.5; }
     .about-body { display: flex; flex-direction: column; gap: var(--space-4); }
     .about-body h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 600; color: var(--color-gold-dark); letter-spacing: 0.06em; }
     .about-body p { font-size: var(--font-size-base); line-height: 1.8; }
@@ -78,6 +111,11 @@
       grid-template-columns: 1fr;
       gap: var(--space-3);
     }
+    .values-section {
+      background: var(--color-surface-2);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
     @media (min-width: 640px) { .values-grid { grid-template-columns: repeat(2, 1fr); } }
     .value-card {
       background: var(--color-surface);
@@ -85,9 +123,18 @@
       border-radius: var(--radius-lg);
       padding: var(--space-4);
     }
+    .value-card.reveal-on-scroll {
+      transform: translateY(28px) scale(0.94);
+      transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.75s ease;
+    }
+    .value-card.reveal-on-scroll.is-visible {
+      transform: translateY(0) scale(1);
+      box-shadow: var(--shadow-md);
+    }
+    .values-grid .value-card:nth-child(2) { transition-delay: 0.14s; }
     .value-card__icon { font-size: 1.75rem; margin-bottom: var(--space-2); }
-    .value-card__title { font-size: var(--font-size-base); font-weight: 700; margin-bottom: 6px; }
-    .value-card__text { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.6; }
+    .value-card__title { font-size: var(--font-size-lg); font-weight: 700; margin-bottom: var(--space-1); }
+    .value-card__text { font-size: var(--font-size-base); color: var(--color-text-secondary); line-height: 1.7; }
     .about-banner {
       padding: 0 0 var(--space-15);
     }
@@ -108,12 +155,6 @@
 
     <header class="page-header about-hero">
       <div class="container">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="/">Home</a>
-          <span class="breadcrumb__sep" aria-hidden="true">/</span>
-          <span aria-current="page">About Us</span>
-        </nav>
-        <p class="page-header__eyebrow">Our Story</p>
         <h1 class="page-header__title">About Us</h1>
         <p class="page-header__subtitle">Sri Lanka's trusted partner for premium wines, champagnes, and spirits.</p>
       </div>
@@ -126,20 +167,56 @@
 
           <div class="about-decorative">
             <div class="about-stat">
-              <div class="about-stat__value">03 Decades</div>
-              <div class="about-stat__label">of Industry Excellence</div>
+              <span class="about-stat__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 16.9l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3z"/>
+                </svg>
+              </span>
+              <div>
+                <div class="about-stat__value">03 Decades</div>
+                <div class="about-stat__label">of Industry Excellence</div>
+              </div>
             </div>
             <div class="about-stat">
-              <div class="about-stat__value">Bringing World-Class</div>
-              <div class="about-stat__label">Brands to Sri Lanka</div>
+              <span class="about-stat__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 7h18"/>
+                  <path d="M5 7v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7"/>
+                  <path d="M8 7a4 4 0 0 1 8 0"/>
+                  <path d="M9 12h6"/>
+                  <path d="M9 16h4"/>
+                </svg>
+              </span>
+              <div>
+                <div class="about-stat__value">Bringing World-Class</div>
+                <div class="about-stat__label">Brands to Sri Lanka</div>
+              </div>
             </div>
             <div class="about-stat">
-              <div class="about-stat__value">Trusted by Hospitality</div>
-              <div class="about-stat__label">&amp; Retail Leaders</div>
+              <span class="about-stat__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 21s7-4.5 7-11V5l-7-2-7 2v5c0 6.5 7 11 7 11z"/>
+                  <path d="M9 12l2 2 4-5"/>
+                </svg>
+              </span>
+              <div>
+                <div class="about-stat__value">Trusted by Hospitality</div>
+                <div class="about-stat__label">&amp; Retail Leaders</div>
+              </div>
             </div>
             <div class="about-stat">
-              <div class="about-stat__value">Driving Growth</div>
-              <div class="about-stat__label">Through Strong Distribution</div>
+              <span class="about-stat__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19V5"/>
+                  <path d="M4 19h16"/>
+                  <path d="M8 15l3-3 3 2 5-6"/>
+                  <path d="M16 8h3v3"/>
+                </svg>
+              </span>
+              <div>
+                <div class="about-stat__value">Driving Growth</div>
+                <div class="about-stat__label">Through Strong Distribution</div>
+              </div>
             </div>
           </div>
 
@@ -189,18 +266,18 @@
     </section>
 
     <!-- Values -->
-    <section class="section" style="background: var(--color-surface-2); border-top: 1px solid var(--color-border);">
+    <section class="section values-section">
       <div class="container">
         <div class="section-header section-header--center">
           <p class="section-header__eyebrow">What Drives Us</p>
           <h2 class="section-header__title">Our Values</h2>
         </div>
         <div class="values-grid">
-          <div class="value-card">
+          <div class="value-card reveal-on-scroll">
             <h3 class="value-card__title">Our Vision</h3>
             <p class="value-card__text">To be Sri Lanka's preferred importer and distributor of premium wines and spirits, recognized for excellence, reliability, and innovation.</p>
           </div>
-          <div class="value-card">
+          <div class="value-card reveal-on-scroll">
             <h3 class="value-card__title">Our Mission</h3>
             <p class="value-card__text">To deliver world-class beverage brands across Sri Lanka through efficient distribution, exceptional service, and long-term partnerships built on trust and mutual success.</p>
           </div>
@@ -215,7 +292,6 @@
         <p class="cta-section__subtitle">Reach out to discuss trade pricing, distribution, or any enquiries about our collection.</p>
         <div class="cta-section__actions">
           <a href="/contact.html" class="btn btn-primary">Contact Us</a>
-          <a href="/" class="btn btn-ghost">Browse Collection</a>
         </div>
       </div>
     </section>
@@ -254,6 +330,7 @@
   </footer>
 
   <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/scroll-reveal.js"></script>
 
 </body>
 </html>

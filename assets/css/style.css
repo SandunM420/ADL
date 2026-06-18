@@ -655,11 +655,11 @@ button.nav-link {
 
 .home-product-card .product-card__name {
   min-height: 2.4em;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.2rem, 2vw, 1.45rem);
-  font-weight: 600;
-  color: #666666;
-  line-height: 1.2;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
 }
 
 .home-product-card .product-card__footer {
@@ -977,6 +977,7 @@ button.nav-link {
 
 .hero {
   min-height: 420px;
+  height: clamp(420px, 34vw, 520px);
   padding: var(--space-4) 0;
   background-color: #120d07;
   border-bottom: 1px solid rgba(201, 168, 76, 0.15);
@@ -999,7 +1000,7 @@ button.nav-link {
 .hero__bg {
   position: absolute;
   inset: 0;
-  background-size: auto 122%;
+  background-size: auto 104%;
   background-position: right center;
   background-repeat: no-repeat;
   opacity: 0;
@@ -1012,21 +1013,21 @@ button.nav-link {
 }
 
 .hero__bg--1 {
-  background-image: url('/assets/images/hero-bg.png');
+  background-image: url('/assets/images/Home hero final 1.png');
 }
 
 .hero__bg--2 {
-  background-image: url('/assets/images/hero banner 2.png');
+  background-image: url('/assets/images/Home hero final 2.png');
 }
 
 .hero__bg--3 {
-  background-image: url('/assets/images/hero banner 3.png');
+  background-image: url('/assets/images/Home hero final 3.png');
 }
 
 .hero__inner {
   position: relative;
   z-index: 3;
-  max-width: 680px;
+  max-width: 620px;
 }
 
 .hero__eyebrow {
@@ -1051,7 +1052,7 @@ button.nav-link {
 }
 
 .hero__title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.35rem, 4vw, 3.5rem);
   font-weight: 600;
   color: #FFFFFF;
   line-height: 1.05;
@@ -1065,11 +1066,11 @@ button.nav-link {
 }
 
 .hero__subtitle {
-  font-size: var(--font-size-lg);
+  font-size: clamp(1rem, 1.2vw, var(--font-size-lg));
   color: rgba(255, 255, 255, 0.78);
-  line-height: 1.7;
-  margin-bottom: var(--space-5);
-  max-width: 540px;
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+  max-width: 520px;
 }
 
 .hero__actions {
@@ -1079,6 +1080,28 @@ button.nav-link {
 }
 
 /* ─── Gallery Strip ─────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .hero {
+    height: auto;
+    min-height: 560px;
+    align-items: flex-start;
+    padding: var(--space-6) 0;
+  }
+
+  .hero__bg {
+    background-size: auto 100%;
+    background-position: center bottom;
+  }
+
+  .hero__inner {
+    max-width: 100%;
+  }
+
+  .hero__title {
+    font-size: clamp(2.1rem, 12vw, 3.2rem);
+  }
+}
 
 .gallery-section {
   padding: var(--space-8) 0;
@@ -1344,8 +1367,9 @@ button.nav-link {
 .trust-bar__bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
   opacity: 0;
   transition: opacity 1.2s ease;
 }
