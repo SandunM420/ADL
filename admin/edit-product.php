@@ -85,9 +85,8 @@ function upload_product_image($file) {
 
 $valid_categories    = ['wines', 'champagne', 'sparkling-wine', 'spirits'];
 $valid_subcategories = [
-    'chile', 'australia', 'south-africa', 'spain',
-    'france',
-    'whiskey', 'rum', 'gin', 'vodka', 'brandy', 'liquor',
+    'chile', 'australia', 'south-africa', 'spain', 'france',
+    'whiskey', 'rum', 'gin', 'vodka', 'brandy', 'liquor', 'tequila',
 ];
 
 /* â”€â”€â”€ Load the product â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -538,6 +537,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
       { value: 'australia',    label: 'Australia' },
       { value: 'south-africa', label: 'South Africa' },
       { value: 'spain',        label: 'Spain' },
+      { value: 'france',       label: 'France' },
     ],
     champagne: [
       { value: 'france', label: 'France' },
@@ -550,6 +550,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
       { value: 'vodka',   label: 'Vodka' },
       { value: 'brandy',  label: 'Brandy' },
       { value: 'liquor',  label: 'Liquor' },
+      { value: 'tequila', label: 'Tequila' },
     ],
   };
 

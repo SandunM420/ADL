@@ -29,10 +29,10 @@ importer and distributor in Sri Lanka.
 ## Navigation Structure
 Home | Wines ▾ | Champagne ▾ | Sparkling Wine | Spirits ▾ | About Us | Contact Us
 
-Wines dropdown: Chile, Australia, South Africa, Spain
+Wines dropdown: Chile, Australia, South Africa, Spain, France
 Champagne dropdown: France
 Sparkling Wine: Single page, no dropdown
-Spirits dropdown: Whiskey, Rum, Gin, Vodka, Brandy, Liquor
+Spirits dropdown: Whiskey, Rum, Gin, Vodka, Brandy, Liquor, Tequila
 
 ## Product Filtering Logic
 - Category + Subcategory = determines which page a product appears on
@@ -44,8 +44,8 @@ Spirits dropdown: Whiskey, Rum, Gin, Vodka, Brandy, Liquor
 - id (INT, PK, auto-increment)
 - name (VARCHAR 255)
 - category (VARCHAR 100) — wines/champagne/sparkling-wine/spirits
-- subcategory (VARCHAR 100) — chile/australia/south-africa/spain/
-                               france/whiskey/rum/gin/vodka/brandy/liquor/NULL
+- subcategory (VARCHAR 100) — chile/australia/south-africa/spain/france/
+                               whiskey/rum/gin/vodka/brandy/liquor/tequila/NULL
 - country (VARCHAR 100) — optional, informational only
 - description (TEXT)
 - image (VARCHAR 255) — file path
@@ -58,13 +58,13 @@ public_html/
 ├── about.html
 ├── contact.html
 ├── assets/css/ assets/js/ assets/images/products/
-├── wines/ chile.html australia.html south-africa.html spain.html
+├── wines/ chile.html australia.html south-africa.html spain.html france.html
 ├── wines/products/product.html (reusable template)
 ├── champagne/ france.html
 ├── champagne/products/product.html
 ├── sparkling-wine/ index.html
 ├── sparkling-wine/products/product.html
-├── spirits/ whiskey.html rum.html gin.html vodka.html brandy.html liquor.html
+├── spirits/ whiskey.html rum.html gin.html vodka.html brandy.html liquor.html tequila.html
 ├── spirits/products/product.html
 ├── api/ products.php config.php
 └── admin/ index.php dashboard.php add-product.php 

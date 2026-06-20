@@ -23,6 +23,7 @@
     '            <a href="/wines/australia.html" role="menuitem">Australia</a>',
     '            <a href="/wines/south-africa.html" role="menuitem">South Africa</a>',
     '            <a href="/wines/spain.html" role="menuitem">Spain</a>',
+    '            <a href="/wines/france.html" role="menuitem">France</a>',
     '          </div>',
     '        </li>',
 
@@ -58,6 +59,7 @@
     '            <a href="/spirits/vodka.html" role="menuitem">Vodka</a>',
     '            <a href="/spirits/brandy.html" role="menuitem">Brandy</a>',
     '            <a href="/spirits/liquor.html" role="menuitem">Liquor</a>',
+    '            <a href="/spirits/tequila.html" role="menuitem">Tequila</a>',
     '          </div>',
     '        </li>',
 
@@ -90,6 +92,7 @@
     '      <a href="/wines/australia.html">Australia</a>',
     '      <a href="/wines/south-africa.html">South Africa</a>',
     '      <a href="/wines/spain.html">Spain</a>',
+    '      <a href="/wines/france.html">France</a>',
     '    </div>',
     '  </details>',
 
@@ -116,6 +119,7 @@
     '      <a href="/spirits/vodka.html">Vodka</a>',
     '      <a href="/spirits/brandy.html">Brandy</a>',
     '      <a href="/spirits/liquor.html">Liquor</a>',
+    '      <a href="/spirits/tequila.html">Tequila</a>',
     '    </div>',
     '  </details>',
 
