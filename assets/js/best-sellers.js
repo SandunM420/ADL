@@ -32,9 +32,10 @@
           '</div>' +
           '<div class="product-card__body">' +
             '<p class="product-card__name">' + escHtml(title) + '</p>' +
+            '<span class="bs-divider" aria-hidden="true"></span>' +
           '</div>' +
           '<div class="product-card__footer">' +
-            '<a href="' + enquiryUrl + '" class="btn btn-outline">Enquire</a>' +
+            '<a href="' + enquiryUrl + '" class="btn btn-outline">Enquire &rsaquo;</a>' +
           '</div>' +
         '</div>';
     });

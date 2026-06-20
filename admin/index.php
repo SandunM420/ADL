@@ -11,7 +11,7 @@ session_start();
 
 require_once __DIR__ . '/../api/config.php';
 
-// Already logged in â€” go straight to the dashboard
+// Already logged in — go straight to the dashboard
 if (!empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header('Location: /admin/dashboard.php');
     exit;

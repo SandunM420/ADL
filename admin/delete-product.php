@@ -74,7 +74,7 @@ try {
         $_SESSION['flash_success'] = '"' . $product['name'] . '" was deleted.';
     }
 } catch (PDOException $e) {
-    error_log('delete-product.php â€” PDO error: ' . $e->getMessage());
+    error_log('delete-product.php — PDO error: ' . $e->getMessage());
     $_SESSION['flash_error'] = 'A database error occurred while deleting the product.';
 }
 

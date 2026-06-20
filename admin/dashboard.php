@@ -2,7 +2,7 @@
 /**
  * Admin: Dashboard
  *
- * Protected page â€” redirects to login if no valid admin session.
+ * Protected page — redirects to login if no valid admin session.
  * Lists every product in the database (visible and hidden) with its
  * image, category, country, and visibility status.
  */
@@ -48,7 +48,7 @@ try {
     );
     $products = $stmt->fetchAll();
 } catch (PDOException $e) {
-    error_log('dashboard.php â€” PDO error: ' . $e->getMessage());
+    error_log('dashboard.php — PDO error: ' . $e->getMessage());
     $db_error = 'Could not load products. Please check the database connection.';
 }
 
@@ -73,7 +73,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
  */
 function format_slug_label($slug) {
     if ($slug === null || $slug === '') {
-        return 'â€”';
+        return '—';
     }
     return str_replace('-', ' ', ucwords($slug, '-'));
 }
@@ -107,7 +107,7 @@ $filter_countries     = distinct_filter_values($products, 'country');
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard â€” Admin | Abeywardana Distributors</title>
+  <title>Dashboard — Admin | Abeywardana Distributors</title>
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -266,7 +266,7 @@ $filter_countries     = distinct_filter_values($products, 'country');
                   <td><?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                   <td><?php echo htmlspecialchars(format_slug_label($product['category']), ENT_QUOTES, 'UTF-8'); ?></td>
                   <td><?php echo htmlspecialchars(format_slug_label($product['subcategory']), ENT_QUOTES, 'UTF-8'); ?></td>
-                  <td><?php echo htmlspecialchars($product['country'] ?: 'â€”', ENT_QUOTES, 'UTF-8'); ?></td>
+                  <td><?php echo htmlspecialchars($product['country'] ?: '—', ENT_QUOTES, 'UTF-8'); ?></td>
                   <td>
                     <?php if ((int) $product['visible'] === 1): ?>
                       <span class="status-badge status-badge--visible">Visible</span>

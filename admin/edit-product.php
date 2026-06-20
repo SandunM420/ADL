@@ -2,7 +2,7 @@
 /**
  * Admin: Edit Product
  *
- * Protected page â€” redirects to login if no valid admin session.
+ * Protected page — redirects to login if no valid admin session.
  * Loads an existing product by id, renders a pre-filled form, and
  * updates the record on submission. The image is only replaced if a
  * new file is uploaded; otherwise the existing image is kept.
@@ -108,7 +108,7 @@ try {
     $stmt->execute([$id]);
     $product = $stmt->fetch();
 } catch (PDOException $e) {
-    error_log('edit-product.php â€” PDO error: ' . $e->getMessage());
+    error_log('edit-product.php — PDO error: ' . $e->getMessage());
     $product = false;
 }
 
@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
 
             } catch (PDOException $e) {
-                error_log('edit-product.php â€” PDO error: ' . $e->getMessage());
+                error_log('edit-product.php — PDO error: ' . $e->getMessage());
                 $errors[] = 'A database error occurred. Please try again.';
             }
         }
@@ -252,7 +252,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Product â€” Admin | Abeywardana Distributors</title>
+  <title>Edit Product — Admin | Abeywardana Distributors</title>
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -421,7 +421,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
               Category <span class="required" aria-label="required">*</span>
             </label>
             <select id="category" name="category" class="form-control" required>
-              <option value="">â€” Select category â€”</option>
+              <option value="">— Select category —</option>
               <option value="wines"
                 <?php echo $form_values['category'] === 'wines' ? 'selected' : ''; ?>>
                 Wines
@@ -446,7 +446,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
               Subcategory <span class="required" aria-label="required" id="subcategory-req">*</span>
             </label>
             <select id="subcategory" name="subcategory" class="form-control">
-              <option value="">â€” Select category first â€”</option>
+              <option value="">— Select category first —</option>
             </select>
           </div>
         </div>
@@ -577,7 +577,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
 
     var placeholder = document.createElement('option');
     placeholder.value       = '';
-    placeholder.textContent = 'â€” Select subcategory â€”';
+    placeholder.textContent = '— Select subcategory —';
     subcategoryEl.appendChild(placeholder);
 
     for (var i = 0; i < options.length; i++) {
