@@ -465,7 +465,31 @@ button.nav-link {
   display: grid;
   grid-template-columns: 42% 1fr;
   min-height: 360px;
+  position: relative;
   transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.product-card__flag-wrap {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 2;
+  line-height: 0;
+}
+
+.country-flag {
+  display: block;
+  height: auto;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.20);
+}
+
+.country-flag--sm { width: 28px; }
+.country-flag--md { width: 48px; border-radius: var(--radius-sm); }
+
+.product-detail__flag-wrap {
+  line-height: 0;
+  margin-bottom: 4px;
 }
 
 .product-card:hover {

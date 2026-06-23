@@ -112,6 +112,7 @@
     </div>
   </footer>
 
+  <script src="../../assets/js/country-flags.js"></script>
   <script src="../../assets/js/navbar.js"></script>
   <script>
     (function () {
@@ -165,7 +166,7 @@
               '<img src="' + imgSrc + '" alt="' + escHtml(product.name) + '" width="400" height="533">' +
             '</div>' +
             '<div class="product-detail__info">' +
-              '<span class="product-card__badge">' + escHtml(meta.subLabel || meta.catLabel) + '</span>' +
+              (window.getCountryFlag && product.country ? '<div class="product-detail__flag-wrap">' + window.getCountryFlag(product.country, 'md') + '</div>' : '<span class="product-card__badge">' + escHtml(meta.subLabel || meta.catLabel) + '</span>') +
               '<h1 class="product-detail__name">' + escHtml(product.name) + '</h1>' +
               (metaRows ? '<div class="product-detail__meta">' + metaRows + '</div>' : '') +
               '<div class="product-detail__divider"></div>' +

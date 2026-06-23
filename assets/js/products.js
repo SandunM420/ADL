@@ -40,8 +40,11 @@
       ? '<div class="product-card__detail"><span class="product-card__detail-label">Tasting Note</span><span class="product-card__detail-value">' + escHtml(product.description) + '</span></div>'
       : '';
 
+    var flagHtml = window.getCountryFlag ? window.getCountryFlag(product.country, 'sm') : '';
+
     return (
       '<article class="product-card">' +
+        (flagHtml ? '<div class="product-card__flag-wrap">' + flagHtml + '</div>' : '') +
         '<a href="' + productUrl + '" class="product-card__image" tabindex="-1" aria-hidden="true">' +
           '<img src="' + imgSrc + '" alt="' + escHtml(product.name) + '" loading="lazy" width="300" height="400">' +
         '</a>' +
