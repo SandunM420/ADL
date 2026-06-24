@@ -922,6 +922,11 @@ button.nav-link {
   gap: var(--space-2);
 }
 
+.footer__credit {
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
 /* ─── Utility Classes ────────────────────────────────────────────────────── */
 
 .text-gold      { color: var(--color-gold); }
