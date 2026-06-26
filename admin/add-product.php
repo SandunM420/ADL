@@ -515,7 +515,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'] ?? 'Admin', ENT_Q
       { value: 'gin',     label: 'Gin' },
       { value: 'vodka',   label: 'Vodka' },
       { value: 'brandy',  label: 'Brandy' },
-      { value: 'liquor',  label: 'Liquor' },
+      { value: 'liquor',  label: 'Liqueur' },
       { value: 'tequila', label: 'Tequila' },
     ],
   };

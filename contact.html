@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us — Abeywardana Distributors</title>
+  <title>Contact Us, Abeywardana Distributors</title>
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <meta name="description" content="Get in touch with Abeywardana Distributors for trade pricing, product enquiries, and distribution partnerships.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,7 +154,7 @@
     <header class="page-header contact-hero">
       <div class="container">
         <h1 class="page-header__title">Contact Us</h1>
-        <p class="page-header__subtitle">Trade enquiries, product availability, pricing — we're here to help.</p>
+        <p class="page-header__subtitle">Trade enquiries, product availability, pricing, we're here to help.</p>
       </div>
     </header>
 
@@ -245,7 +245,7 @@
         <div class="contact-map">
           <iframe
             src="https://maps.google.com/maps?q=No%20189%2F2%20Stanley%20Thilakarathne%20Mawatha%2C%20Nugegoda%2C%20Sri%20Lanka&output=embed"
-            title="Abeywardana Distributors (Pvt) Ltd — No: 189/2, Stanley Thilakarathne Mawatha, Nugegoda"
+            title="Abeywardana Distributors (Pvt) Ltd, No: 189/2, Stanley Thilakarathne Mawatha, Nugegoda"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             allowfullscreen
@@ -261,16 +261,19 @@
       <div class="footer__grid">
         <div>
           <div class="footer__logo"><img src="/assets/images/logo-admin.png" alt="Abeywardana Distributors"></div>
-          <p class="footer__desc">Premium alcoholic and non-alcoholic beverage importer and distributor, serving Sri Lanka island-wide.</p>
+          <p class="footer__desc">Premium alcoholic and non alcoholic beverage importer and distributor, serving Sri Lanka island wide.</p>
         </div>
         <div>
           <p class="footer__heading">Products</p>
           <ul class="footer__links">
+            <li><a href="/champagne/france.html">Champagne</a></li>
+            <li><a href="/sparkling-wine/index.html">Sparkling Wines</a></li>
             <li><a href="/wines/chile.html">Chilean Wines</a></li>
             <li><a href="/wines/australia.html">Australian Wines</a></li>
-            <li><a href="/champagne/france.html">Champagne</a></li>
-            <li><a href="/sparkling-wine/index.html">Sparkling Wine</a></li>
-            <li><a href="/spirits/whiskey.html">Spirits</a></li>
+            <li><a href="/wines/france.html">French Wines</a></li>
+            <li><a href="/wines/spain.html">Spanish Wines</a></li>
+            <li><a href="/wines/south-africa.html">South African Wines</a></li>
+            <li>Spirits</li>
           </ul>
         </div>
         <div>
@@ -299,37 +302,56 @@
         if (el) el.value = product;
       }
 
-      /* Show success/error flash from redirect */
-      var success = params.get('success');
-      var error   = params.get('error');
-      var alert   = document.getElementById('form-alert');
-      if (success === '1') {
-        alert.className = 'alert alert-success';
-        alert.textContent = 'Your enquiry has been sent. We\'ll be in touch shortly.';
-        alert.hidden = false;
-      } else if (error) {
-        alert.className = 'alert alert-error';
-        alert.textContent = decodeURIComponent(error);
-        alert.hidden = false;
+      var alertBox = document.getElementById('form-alert');
+
+      function showAlert(type, message) {
+        alertBox.className = 'alert alert-' + type;
+        alertBox.textContent = message;
+        alertBox.hidden = false;
+        alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
       var form = document.getElementById('contact-form');
       if (form) {
         form.addEventListener('submit', function (event) {
-          var requiredFields = [
-            document.getElementById('name'),
-            document.getElementById('email'),
-            document.getElementById('message')
-          ];
-          var firstMissing = requiredFields.find(function (field) {
-            return field && field.value.trim() === '';
-          });
+          event.preventDefault();
 
-          if (firstMissing) {
-            event.preventDefault();
-            window.alert('Please fill your name, email and your enquiry.');
-            firstMissing.focus();
+          var name    = document.getElementById('name');
+          var email   = document.getElementById('email');
+          var message = document.getElementById('message');
+
+          if (!name.value.trim() || !email.value.trim() || !message.value.trim()) {
+            showAlert('error', 'Please fill in your name, email and message.');
+            (!name.value.trim() ? name : !email.value.trim() ? email : message).focus();
+            return;
           }
+
+          var submitBtn = form.querySelector('button[type="submit"]');
+          var originalText = submitBtn.textContent;
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Sending…';
+          alertBox.hidden = true;
+
+          fetch('/contact-handler.php', {
+            method: 'POST',
+            body: new FormData(form)
+          })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data.success) {
+              showAlert('success', 'Your enquiry has been sent. We\'ll be in touch shortly.');
+              form.reset();
+            } else {
+              showAlert('error', data.error || 'Something went wrong. Please try again.');
+            }
+          })
+          .catch(function () {
+            showAlert('error', 'Could not send your message. Please try again or call us directly.');
+          })
+          .finally(function () {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          });
         });
       }
     }());

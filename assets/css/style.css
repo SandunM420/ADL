@@ -1360,6 +1360,12 @@ button.nav-link {
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: var(--radius-sm);
   padding: 2px 8px;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+a.category-card__tag:hover {
+  background: rgba(255, 255, 255, 0.28);
+  color: #FFFFFF;
 }
 
 .category-card__cta {
